@@ -1,3 +1,1 @@
-# PointOfSaleSystemWeb
-# EMS
 # EMS
