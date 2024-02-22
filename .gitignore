@@ -1,1 +1,6 @@
 /EMS-ejb/dist/
+/dist/
+/build/
+/EMS-war/build/
+/EMS-war/dist/
+/EMS-ejb/build/
