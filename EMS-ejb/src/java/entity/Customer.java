@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -25,7 +25,6 @@ import javax.persistence.TemporalType;
 @Entity
 public class Customer implements Serializable {
 
-    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +41,12 @@ public class Customer implements Serializable {
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private ArrayList<Contact> contacts;
+    
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private ArrayList<Event> eventsHost;
+    
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    private ArrayList<Event> eventsAttend;
 
 
     public Long getId() {
@@ -121,6 +126,37 @@ public class Customer implements Serializable {
     public void setContacts(ArrayList<Contact> contacts) {
         this.contacts = contacts;
     }
+    
+    
+    /**
+     * @return the eventsHost
+     */
+    public ArrayList<Event> getEventsHost() {
+        return eventsHost;
+    }
+
+    /**
+     * @param eventsHost the eventsHost to set
+     */
+    public void setEventsHost(ArrayList<Event> eventsHost) {
+        this.eventsHost = eventsHost;
+    }
+
+    /**
+     * @return the eventsAttend
+     */
+    public ArrayList<Event> getEventsAttend() {
+        return eventsAttend;
+    }
+
+    /**
+     * @param eventsAttend the eventsAttend to set
+     */
+    public void setEventsAttend(ArrayList<Event> eventsAttend) {
+        this.eventsAttend = eventsAttend;
+    }
+
+    
 
 
     @Override
