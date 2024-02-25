@@ -5,8 +5,8 @@
 package managedbean;
 
 import entity.Customer;
+import exceptions.CustomerNotFoundException;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -16,13 +16,14 @@ import session.CustomerSessionLocal;
  *
  * @author alvintjw
  */
+//EMS
 @Named(value = "authenticationManagedBean")
 @SessionScoped
 public class AuthenticationManagedBean implements Serializable {
 
   
 
-   @EJB
+    @EJB
     private CustomerSessionLocal customerSessionLocal;
     private String email;
     private String contactnumber;
@@ -31,6 +32,7 @@ public class AuthenticationManagedBean implements Serializable {
     private String password;
     private String confirmpassword;
     private int userId = -1;
+    private Customer loggedinCustomer;
 
     /**
      * Creates a new instance of AuthenticationManagedBean
@@ -62,12 +64,21 @@ public class AuthenticationManagedBean implements Serializable {
     }
 
     public String login() {
-        if (getEmail().equals("user1") && getPassword().equals("password")) {
+        
+        try {
+            loggedinCustomer = customerSessionLocal.retrieveCustomerByEmail(email);
+        } catch (CustomerNotFoundException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        
+        if (loggedinCustomer != null && loggedinCustomer.getPassword().equals(this.getPassword())) {
             //login successful
             //store the logged in user id
-            setUserId(10);
+            //setUserId(10);
             //do redirect
-            return "/secret/secret.xhtml?faces-redirect=true";
+            return "index.xhtml";
+            //return "/secret/secret.xhtml?faces-redirect=true";
         } else {
             //login failed
             setEmail(null);

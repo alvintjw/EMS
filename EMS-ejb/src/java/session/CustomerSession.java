@@ -5,10 +5,12 @@
 package session;
 
 import entity.Customer;
+import exceptions.CustomerNotFoundException;
 import exceptions.NoResultException;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -53,7 +55,36 @@ public class CustomerSession implements CustomerSessionLocal {
         em.persist(c);
     } //end createCustomer
 
+     @Override
+    public List<Customer> searchCustomersByEmail(String email) {
+        Query q;
+        if (email != null) {
+            q = em.createQuery("SELECT c FROM Customer c WHERE "
+                    + "LOWER(c.email) LIKE :email");
+            q.setParameter("email", "%" + email.toLowerCase() + "%");
+        } else {
+            //code should not reach here
+            q = em.createQuery("SELECT c FROM Customer c");
+        }
+
+        return q.getResultList();
+    } //end searchCustomers
     
+    @Override
+    public Customer retrieveCustomerByEmail(String email) throws CustomerNotFoundException
+    {
+        Query query = em.createQuery("SELECT c FROM Customer c WHERE c.email = :inEmail");
+        query.setParameter("inEmail", email);
+        
+        try
+        {
+            return (Customer)query.getSingleResult();
+        }
+        catch(javax.persistence.NoResultException | NonUniqueResultException ex)
+        {
+            throw new CustomerNotFoundException("Customer email " + email + " does not exist!");
+        }
+    }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

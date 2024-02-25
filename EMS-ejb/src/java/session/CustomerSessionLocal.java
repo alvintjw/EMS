@@ -5,6 +5,7 @@
 package session;
 
 import entity.Customer;
+import exceptions.CustomerNotFoundException;
 import exceptions.NoResultException;
 import java.util.List;
 import javax.ejb.Local;
@@ -21,5 +22,9 @@ public interface CustomerSessionLocal {
     public Customer getCustomer(Long cId) throws NoResultException;
 
     public void createCustomer(Customer c);
+
+    public List<Customer> searchCustomersByEmail(String email);
+
+    public Customer retrieveCustomerByEmail(String email) throws CustomerNotFoundException;
 
 }
