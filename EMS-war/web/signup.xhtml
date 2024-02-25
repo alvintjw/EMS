@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Sign Up</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:outputLabel for="email" value="Email:"/>
+            <p:inputText id="email" value="#{authenticationManagedBean.email}" required="true" label="Email"/><br/>
+            
+            <p:outputLabel for="password" value="Password:"/>
+            <p:password id="password" value="#{authenticationManagedBean.password}" required="true" label="Password"/><br/>
+            
+            <p:outputLabel for="confirmPassword" value="Confirm Password:"/>
+            <p:password id="confirmPassword" value="#{authenticationManagedBean.confirmpassword}" required="true" match="password" label="Confirm Password"/><br/>
+            
+            <p:outputLabel for="firstName" value="First Name:"/>
+            <p:inputText id="firstName" value="#{authenticationManagedBean.firstname}" required="true" label="First Name"/>
+            
+            <p:outputLabel for="lastName" value="Last Name:"/>
+            <p:inputText id="lastName" value="#{authenticationManagedBean.lastname}" required="true" label="Last Name"/><br/>
+            
+            <p:outputLabel for="contactNumber" value="Contact Number:"/>
+            <p:inputText id="contactNumber" value="#{authenticationManagedBean.contactNo}" required="false" label="Contact Number"/>
+            
+            <p:commandButton value="Sign Up" action="#{authenticationManagedBean.register}" ajax="false"/>
+        </h:form>
+    </h:body>
+</html>

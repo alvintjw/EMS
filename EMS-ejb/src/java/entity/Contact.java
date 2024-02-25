@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 /**
  *
@@ -21,7 +22,7 @@ public class Contact implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String phone;
     private String email;
 
@@ -33,6 +34,7 @@ public class Contact implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     
     /**
      * @return the phone

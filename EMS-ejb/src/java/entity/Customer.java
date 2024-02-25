@@ -30,14 +30,18 @@ public class Customer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private byte gender;
-    private String name;
+    private String email;
+    private String contactnumber;
+    private String firstname;
+    private String lastname;
+    private String password;
+    
 
-    @Temporal(TemporalType.DATE)
-    private Date dob;
-
-    @Temporal(TemporalType.DATE)
-    private Date Joined;
+//    @Temporal(TemporalType.DATE)
+//    private Date dob;
+//
+//    @Temporal(TemporalType.DATE)
+//    private Date joined;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private ArrayList<Contact> contacts;
@@ -56,62 +60,79 @@ public class Customer implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getContactnumber() {
+        return contactnumber;
+    }
+
+    public void setContactnumber(String contactnumber) {
+        this.contactnumber = contactnumber;
+    }
     
-    /**
-     * @return the gender
-     */
-    public byte getGender() {
-        return gender;
+    
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    /**
-     * @param gender the gender to set
-     */
-    public void setGender(byte gender) {
-        this.gender = gender;
+    
+    public String getFirstname() {
+        return firstname;
     }
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+    public String getLastname() {
+        return lastname;
     }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+
 
     /**
      * @return the dob
      */
-    public Date getDob() {
-        return dob;
-    }
-
-    /**
-     * @param dob the dob to set
-     */
-    public void setDob(Date dob) {
-        this.dob = dob;
-    }
-
-    /**
-     * @return the Joined
-     */
-    public Date getJoined() {
-        return Joined;
-    }
+//    public Date getDob() {
+//        return dob;
+//    }
+//
+//    /**
+//     * @param dob the dob to set
+//     */
+//    public void setDob(Date dob) {
+//        this.dob = dob;
+//    }
+//
+//    /**
+//     * @return the Joined
+//     */
+//    public Date getJoined() {
+//        return joined;
+//    }
 
     /**
      * @param Joined the Joined to set
      */
-    public void setJoined(Date Joined) {
-        this.Joined = Joined;
-    }
+//    public void setJoined(Date Joined) {
+//        this.joined = Joined;
+//    }
 
     /**
      * @return the contacts
