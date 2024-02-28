@@ -23,7 +23,7 @@ public class CustomerSession implements CustomerSessionLocal {
 
     @PersistenceContext(unitName = "EMS-ejbPU")
     private EntityManager em;
-    
+
     @Override
     public List<Customer> searchCustomers(String name) {
         Query q;
@@ -37,7 +37,7 @@ public class CustomerSession implements CustomerSessionLocal {
 
         return q.getResultList();
     } //end searchCustomers
-    
+
     @Override
     public Customer getCustomer(Long cId) throws NoResultException {
         Customer cust = em.find(Customer.class, cId);
@@ -49,13 +49,12 @@ public class CustomerSession implements CustomerSessionLocal {
         }
     } //end getCustomer
 
-    
     @Override
     public void createCustomer(Customer c) {
         em.persist(c);
     } //end createCustomer
 
-     @Override
+    @Override
     public List<Customer> searchCustomersByEmail(String email) {
         Query q;
         if (email != null) {
@@ -69,21 +68,29 @@ public class CustomerSession implements CustomerSessionLocal {
 
         return q.getResultList();
     } //end searchCustomers
-    
+
     @Override
-    public Customer retrieveCustomerByEmail(String email) throws CustomerNotFoundException
-    {
+    public Customer retrieveCustomerByEmail(String email) throws CustomerNotFoundException {
         Query query = em.createQuery("SELECT c FROM Customer c WHERE c.email = :inEmail");
         query.setParameter("inEmail", email);
-        
-        try
-        {
-            return (Customer)query.getSingleResult();
-        }
-        catch(javax.persistence.NoResultException | NonUniqueResultException ex)
-        {
+
+        try {
+            return (Customer) query.getSingleResult();
+        } catch (javax.persistence.NoResultException | NonUniqueResultException ex) {
             throw new CustomerNotFoundException("Customer email " + email + " does not exist!");
         }
+    }
+
+    @Override
+    public void updateCustomer(Customer c) throws NoResultException {
+        Customer oldC = getCustomer(c.getId());
+        
+        oldC.setFirstname(c.getFirstname());
+        oldC.setLastname(c.getLastname());
+        oldC.setEmail(c.getEmail());
+        oldC.setContactnumber(c.getContactnumber());
+        oldC.setProfilePicture(c.getProfilePicture());
+
     }
 
     // Add business logic below. (Right-click in editor and choose

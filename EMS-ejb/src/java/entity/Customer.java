@@ -6,17 +6,14 @@ package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -29,9 +26,13 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+   
     
     private String email;
     private String contactnumber;
+    @Lob
+    private byte[] profilePicture;
+    private String profilePhotoName;
     private String firstname;
     private String lastname;
     private String password;
@@ -71,6 +72,22 @@ public class Customer implements Serializable {
 
     public void setContactnumber(String contactnumber) {
         this.contactnumber = contactnumber;
+    }
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public String getProfilePhotoName() {
+        return profilePhotoName;
+    }
+
+    public void setProfilePhotoName(String profilePhotoName) {
+        this.profilePhotoName = profilePhotoName;
     }
     
     

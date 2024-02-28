@@ -77,7 +77,7 @@ public class AuthenticationManagedBean implements Serializable {
             //store the logged in user id
             //setUserId(10);
             //do redirect
-            return "index.xhtml";
+            return "index.xhtml?faces-redict=true";
             //return "/secret/secret.xhtml?faces-redirect=true";
         } else {
             //login failed

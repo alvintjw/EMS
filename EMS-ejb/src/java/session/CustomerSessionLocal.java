@@ -27,4 +27,6 @@ public interface CustomerSessionLocal {
 
     public Customer retrieveCustomerByEmail(String email) throws CustomerNotFoundException;
 
+    public void updateCustomer(Customer c) throws NoResultException;
+
 }

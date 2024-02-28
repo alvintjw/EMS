@@ -1,31 +1,49 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Sign Up</title>
     </h:head>
     <h:body>
-        <h:form>
-            <p:outputLabel for="email" value="Email:"/>
-            <p:inputText id="email" value="#{authenticationManagedBean.email}" required="true" label="Email"/><br/>
+        <h:form style="text-align:center; margin:auto; max-width:400px; margin-top:50px;">
+            <p:growl id="growl" life="3000" />
+            <h:link outcome="/index.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                <p:graphicImage name="logo.png" library="images" style="width:200px; margin-bottom:20px;"/>
+            </h:link>
+            <p:panel header="Register An Account" style="margin:auto; max-width:400px; margin-top:50px;">
+                <h:panelGrid columns="2" style="margin-bottom:10px; width:100%;" columnClasses="ui-grid-col-4,ui-grid-col-8">
+                    <p:outputLabel for="email" value="Email:"/>
+                    <p:inputText id="email" value="#{authenticationManagedBean.email}" required="true" label="Email">
+<!--                        <f:validateRegex pattern="^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,6}$"/>-->
+                    </p:inputText>
+
+                    <p:outputLabel for="password" value="Password:"/>
+                    <p:password id="password" value="#{authenticationManagedBean.password}" required="true" label="Password" match="confirmPassword" />
+
+                    <p:outputLabel for="confirmPassword" value="Confirm Password:"/>
+                    <p:password id="confirmPassword" value="#{authenticationManagedBean.confirmpassword}" required="true" label="Confirm Password" />
+
+                    <p:outputLabel for="firstName" value="First Name:"/>
+                    <p:inputText id="firstName" value="#{authenticationManagedBean.firstname}" required="true" label="First Name"/>
+
+                    <p:outputLabel for="lastName" value="Last Name:"/>
+                    <p:inputText id="lastName" value="#{authenticationManagedBean.lastname}" required="true" label="Last Name"/>
+
+                    <p:outputLabel for="contactNumber" value="Contact Number:"/>
+                    <p:inputText id="contactNumber" value="#{authenticationManagedBean.contactNo}" label="Contact Number"/>
+                </h:panelGrid>
+                
+
+                <p:commandButton value="Sign Up" action="#{authenticationManagedBean.register}" ajax="false" styleClass="ui-button-primary" style="width:100%;"/>
+                
+            </p:panel>
             
-            <p:outputLabel for="password" value="Password:"/>
-            <p:password id="password" value="#{authenticationManagedBean.password}" required="true" label="Password"/><br/>
-            
-            <p:outputLabel for="confirmPassword" value="Confirm Password:"/>
-            <p:password id="confirmPassword" value="#{authenticationManagedBean.confirmpassword}" required="true" label="Confirm Password"/><br/>
-            
-            <p:outputLabel for="firstName" value="First Name:"/>
-            <p:inputText id="firstName" value="#{authenticationManagedBean.firstname}" required="true" label="First Name"/>
-            
-            <p:outputLabel for="lastName" value="Last Name:"/>
-            <p:inputText id="lastName" value="#{authenticationManagedBean.lastname}" required="true" label="Last Name"/><br/>
-            
-            <p:outputLabel for="contactNumber" value="Contact Number:"/>
-            <p:inputText id="contactNumber" value="#{authenticationManagedBean.contactNo}" required="false" label="Contact Number"/>
-            
-            <p:commandButton value="Sign Up" action="#{authenticationManagedBean.register}" ajax="false"/>
+            <h:link outcome="/login.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                Click Here To Login!
+            </h:link>
+
         </h:form>
     </h:body>
 </html>

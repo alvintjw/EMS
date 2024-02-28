@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Edit Customer Profile</title>
+</h:head>My 
+<h:body>
+
+    <h:form enctype="multipart/form-data" >
+         <p:growl id="growl" showDetail="true" life="3000" />
+        <p:panelGrid columns="2" columnClasses="label,value" style="margin-bottom:10px;">
+            
+            <f:facet name="header">
+                <p:graphicImage name="logo.png" library="images" width="60px" alt="Logo" style="margin-right:20px"/>
+                Edit Profile
+            </f:facet>
+            
+            <h:outputLabel for="firstName" value="First Name:" />
+            <p:inputText id="firstName" value="#{customerManagedBean.firstname}" required="true" label="First Name"/>
+
+            <h:outputLabel for="lastName" value="Last Name:" />
+            <p:inputText id="lastName" value="#{customerManagedBean.lastname}" required="true" label="Last Name"/>
+
+            <h:outputLabel for="email" value="Email:" />
+            <p:inputText id="email" value="#{customerManagedBean.email}" required="true" label="Email"/>
+
+            <h:outputLabel for="contactDetails" value="Contact Details:" />
+            <p:inputText id="contactDetails" value="#{customerManagedBean.contactNumber}"  label="Contact Details"/>
+
+            <h:outputLabel for="profilePhoto" value="Profile Photo:" />
+            <p:fileUpload id="profilePhoto" value="#{customerManagedBean.uploadedFile}" mode="simple" label="Choose" />
+            
+            <p:commandButton value="Upload Photo" action="#{customerManagedBean.uploadProfilePhoto}" ajax="false"/>
+            <p:graphicImage value="#{customerManagedBean.profilePhotoName}" rendered="#{not empty customerManagedBean.profilePhotoName}" />
+            
+        </p:panelGrid>
+
+        <p:commandButton value="Save Changes" action="#{customerManagedBean.saveCustomerDetails}" ajax="false"/>
+    </h:form>
+
+</h:body>
+</html>
