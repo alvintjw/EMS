@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Create New Event</title>
+    </h:head>
+    <h:body>
+        <h:form style="max-width: 600px; margin: auto; margin-top: 50px; text-align:center;">
+            <h:outputText value="cId param: #{eventManagedBean.cId}" />
+            <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                <p:graphicImage name="logo.png" library="images" style="width:200px; margin-bottom:20px;"/>
+            </h:link>
+            <p:growl id="growl" life="3000"/>
+
+            <p:panel header="Register A New Event" style="margin-bottom: 20px;">
+
+                <h:panelGrid columns="2" cellpadding="5">
+
+                    <p:outputLabel for="title" value="Event Title:" />
+                    <p:inputText id="title" value="#{eventManagedBean.eventTitle}" required="true" label="Title" />
+
+                    <p:outputLabel for="date" value="Date of Event:" />
+                    <p:calendar id="date" value="#{eventManagedBean.eventDate}" pattern="dd/MM/yyyy HH:mm" required="true" label="Date and Time of Event" showOn="button" />
+                    <p:outputLabel for="deadline" value="Registration Deadline:" />
+                    <p:calendar id="deadline" value="#{eventManagedBean.eventDateline}" pattern="dd/MM/yyyy HH:mm" required="true" showOn="button" label="Registration Deadline" />
+
+                    <p:outputLabel for="description" value="Description:" />
+                    <p:inputTextarea id="description" value="#{eventManagedBean.eventDesc}" required="true" label="Description" />
+
+                    <p:outputLabel for="location" value="Location:" />
+                    <p:inputText id="location" value="#{eventManagedBean.eventLocation}" required="true" label="Location" />
+
+                </h:panelGrid>
+
+                <p:commandButton value="Create Event" action="#{eventManagedBean.createEvent}" update="growl" styleClass="ui-button-success" style="margin-top: 10px; width: 100%;" />
+
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>

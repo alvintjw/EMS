@@ -13,8 +13,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -29,16 +32,31 @@ public class Event implements Serializable {
     private Long id;
     
     private String eventTitle;
+    @Temporal(TemporalType.DATE)
     private Date eventDate;
     private String eventLocation;
     private String eventDesc;
+    @Temporal(TemporalType.DATE)
     private Date eventDateline;
     
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private ArrayList<Customer> customerAttend;
     
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
+    //@JoinColumn(nullable = false)
     private Customer host;
+
+    public Event() {
+    }
+
+    public Event(String eventTitle, Date eventDate, String eventLocation, String eventDesc, Date eventDateline) {
+        this.eventTitle = eventTitle;
+        this.eventDate = eventDate;
+        this.eventLocation = eventLocation;
+        this.eventDesc = eventDesc;
+        this.eventDateline = eventDateline;
+    }
+    
     
     public Long getId() {
         return id;

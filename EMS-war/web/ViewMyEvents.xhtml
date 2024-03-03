@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>View My Events</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:toolbar>
+                <f:facet name="left">
+                    <h:graphicImage name="logo.png" library="images" width="60px" alt="Logo"/>
+                     <p:inputText placeholder="Search..." style = "margin-left:20px"/>
+                    <p:commandButton  action="#{searchManagedBean.search}" icon="fa fa-fw fa-search" />    
+                </f:facet>
+            
+                <f:facet name="right">
+                    
+       <!--                <h:button value="Find Events" outcome="/findEvents.xhtml" styleClass="header-button"/>
+                                <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/>-->
+                    <p:commandButton value="Login" action="/login.xhtml" icon="pi pi-sign-in"  />
+                    <p:commandButton value="Sign Up" action="/signup.xhtml" icon="pi pi-user-plus" />
+                </f:facet>
+            </p:toolbar>
+            <p:growl id="growl" life="3000"/>
+
+            <h:panelGrid columns="1" style="width:100%; margin-bottom:20px;">
+                <p:panel header="Hosted Events" style="margin-bottom: 10px;">
+                    <p:dataTable var="event" value="#{eventManagedBean.hostedEvents}" emptyMessage="No events hosted.">
+
+                        <p:column headerText="Title">
+                            <h:outputText value="#{event.eventTitle}" />
+                        </p:column>
+                        <p:column headerText="Date">
+                            <h:outputText value="#{event.eventDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:MM" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Location">
+                            <h:outputText value="#{event.eventLocation}" />
+                        </p:column>
+                        <p:column headerText="Description">
+                            <h:outputText value="#{event.eventDesc}" />
+                        </p:column>
+                        <p:column headerText="Deadline">
+                            <h:outputText value="#{event.eventDateline}">
+                                <f:convertDateTime pattern="dd/MM/yyyy " />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Actions">
+                            <p:commandButton value="View Details" action="#{eventManagedBean.viewDetails(event.id)}" icon="pi pi-search" />
+                            <p:commandButton value="Edit" action="#{eventManagedBean.editEvent(event.id)}" icon="pi pi-pencil" />
+                            <p:commandButton value="Delete" action="#{eventManagedBean.deleteEvent(event.id)}" update="@form" icon="pi pi-trash" />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
+                <p:panel header="Registered Events" style="margin-bottom: 10px;">
+                    <p:dataTable var="event" value="#{eventManagedBean.registeredEvents}" emptyMessage="No events registered.">
+
+                        <p:column headerText="Title">
+                            <h:outputText value="#{event.eventTitle}" />
+                        </p:column>
+                        <p:column headerText="Date">
+                            <h:outputText value="#{event.eventDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:MM" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Location">
+                            <h:outputText value="#{event.eventLocation}" />
+                        </p:column>
+                        <p:column headerText="Description">
+                            <h:outputText value="#{event.eventDesc}" />
+                        </p:column>
+                        <p:column headerText="Deadline">
+                            <h:outputText value="#{event.eventDateline}">
+                                <f:convertDateTime pattern="dd/MM/yyyy " />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Actions">
+                            <p:commandButton value="View Details" action="#{eventManagedBean.viewDetails(event.id)}" icon="pi pi-search" />
+                            <p:commandButton value="Unregister" action="#{eventManagedBean.unregisterEvent(event.id)}" update="@form" icon="pi pi-times" />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>

@@ -1,16 +1,13 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!--<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Event Management System</title>
+        <title>Available Events</title>
     </h:head>
     <h:body>
         <h:form>
-            <h:outputText value="cId param: #{customerManagedBean.cId}" />
             <p:toolbar>
                 <f:facet name="left">
                     <h:graphicImage name="logo.png" library="images" width="60px" alt="Logo"/>
@@ -19,25 +16,24 @@
                 </f:facet>
 
                 <f:facet name="right">                
-                    <p:commandButton value="Find Events" action="#{eventManagedBean.navigateToFindEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button">
-                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{customerManagedBean.cId}" />
-                    </p:commandButton>
-
-                    <p:commandButton value="Create Events" action="#{eventManagedBean.navigateToCreateEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button">
-                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{customerManagedBean.cId}" />
-                    </p:commandButton>
-                    <!--                    <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/>-->
-
+                    <h:button value="Find Events" outcome="/findEvents.xhtml" styleClass="header-button"/>
+                    <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/><!--
+                              <h:graphicImage name="#{customerManagedBean.profilePhotoName != null ? customerManagedBean.profilePhotoName : 'blankprofilepicture.png'}" library="images" width="60px" alt="Profile Picture"/>>-->
                     <h:graphicImage name="blankprofilepicture.png" library="images" width="60px" alt="Logo"/>
                     <p:menuButton value="#{customerManagedBean.fullname}">
-                         <p:menuitem value="View My Events" action ="#{customerManagedBean.editCustomer}" />
-                        <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}"  />
-                        <p:menuitem value="Log Out"  action="#{customerManagedBean.logout}"  />
+                        <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}" icon="pi pi-save" />
+                        <p:menuitem value="Log Out"  action="#{customerManagedBean.logout}" icon="pi pi-refresh" />
                     </p:menuButton>
                 </f:facet>
             </p:toolbar>
-            
-               <p:dataTable var="event" value="#{eventManagedBean.availableEvents}"
+
+
+
+
+
+
+
+            <p:dataTable var="event" value="#{eventManagedBean.availableEvents}"
                          emptyMessage="No events available to attend.">
                 <f:facet name="header">
                     Available Events
@@ -60,6 +56,7 @@
                 <p:column headerText="Deadline">
                     <h:outputText value="#{event.eventDateline}">
                         <f:convertDateTime pattern="dd/MM/yyyy " />
+
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Actions">
@@ -71,4 +68,3 @@
         </h:form>
     </h:body>
 </html>
-

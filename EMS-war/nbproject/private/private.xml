@@ -4,13 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/src/java/managedbean/CustomerManagedBean.java</file>
-            <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/web/layout/default.xhtml</file>
+            <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/web/createEvents.xhtml</file>
+            <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/web/ViewMyEvents.xhtml</file>
             <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/web/homepage.xhtml</file>
-            <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/src/java/managedbean/AuthenticationManagedBean.java</file>
-            <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/web/login.xhtml</file>
             <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/web/index.xhtml</file>
-            <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/web/editCustomer.xhtml</file>
-            <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/web/signup.xhtml</file>
+            <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/src/java/managedbean/EventManagedBean.java</file>
+            <file>file:/Users/alvintjw/Desktop/IS3106/Assignments/EMS/EMS-war/web/findEvents.xhtml</file>
         </group>
     </open-files>
 </project-private>

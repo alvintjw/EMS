@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 /**
@@ -47,10 +48,10 @@ public class Customer implements Serializable {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private ArrayList<Contact> contacts;
     
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="host", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private ArrayList<Event> eventsHost;
     
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy= "customerAttend",cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private ArrayList<Event> eventsAttend;
 
 

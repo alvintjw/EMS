@@ -5,6 +5,7 @@
 package session;
 
 import entity.Customer;
+import entity.Event;
 import exceptions.CustomerNotFoundException;
 import exceptions.NoResultException;
 import java.util.List;
@@ -28,5 +29,9 @@ public interface CustomerSessionLocal {
     public Customer retrieveCustomerByEmail(String email) throws CustomerNotFoundException;
 
     public void updateCustomer(Customer c) throws NoResultException;
+
+    public List<Event> eventsRegistered(Customer c) throws NoResultException;
+
+    public List<Event> eventsAttended(Customer c) throws NoResultException;
 
 }

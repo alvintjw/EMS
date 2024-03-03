@@ -5,6 +5,7 @@
 package session;
 
 import entity.Customer;
+import entity.Event;
 import exceptions.CustomerNotFoundException;
 import exceptions.NoResultException;
 import java.util.List;
@@ -90,7 +91,18 @@ public class CustomerSession implements CustomerSessionLocal {
         oldC.setEmail(c.getEmail());
         oldC.setContactnumber(c.getContactnumber());
         oldC.setProfilePicture(c.getProfilePicture());
-
+    }
+    
+    @Override
+    public List<Event> eventsRegistered(Customer c) throws NoResultException {
+        Customer cust = getCustomer(c.getId());
+        return cust.getEventsHost();
+    }
+    
+    @Override
+    public List<Event> eventsAttended(Customer c) throws NoResultException {
+        Customer cust = getCustomer(c.getId());
+        return cust.getEventsAttend();
     }
 
     // Add business logic below. (Right-click in editor and choose

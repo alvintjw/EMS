@@ -25,6 +25,39 @@
                     <p:commandButton value="Sign Up" action="/signup.xhtml" icon="pi pi-user-plus" />
                 </f:facet>
             </p:toolbar>
+            
+               <p:dataTable var="event" value="#{eventManagedBean.availableEvents}"
+                         emptyMessage="No events available to attend.">
+                <f:facet name="header">
+                    Available Events
+                </f:facet>
+
+                <p:column headerText="Title">
+                    <h:outputText value="#{event.eventTitle}" />
+                </p:column>
+                <p:column headerText="Date">
+                    <h:outputText value="#{event.eventDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:MM" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Location">
+                    <h:outputText value="#{event.eventLocation}" />
+                </p:column>
+                <p:column headerText="Description">
+                    <h:outputText value="#{event.eventDesc}" />
+                </p:column>
+                <p:column headerText="Deadline">
+                    <h:outputText value="#{event.eventDateline}">
+                        <f:convertDateTime pattern="dd/MM/yyyy " />
+
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Actions">
+                    <!-- You can put buttons or links here for actions like 'View', 'Register', etc. -->
+                    <p:commandButton value="View" />
+                    <p:commandButton value="Register"/>
+                </p:column>
+            </p:dataTable>
         </h:form>
     </h:body>
 </html>

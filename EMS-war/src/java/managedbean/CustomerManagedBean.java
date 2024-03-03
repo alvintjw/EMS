@@ -37,6 +37,7 @@ public class CustomerManagedBean implements Serializable {
     private String password;
     private String confirmpassword;
     private Customer loggedinCustomer;
+     private Long cId;
 
     @PostConstruct
     public void init() {
@@ -60,6 +61,8 @@ public class CustomerManagedBean implements Serializable {
         if (loggedinCustomer != null && loggedinCustomer.getPassword().equals(this.getPassword())) {
             loadCustomer();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Login Successful", "Welcome back!"));
+            System.out.println("From Customer Managed Bean: " + loggedinCustomer.getId());
+            cId = loggedinCustomer.getId();
             return "homepage.xhtml";
             //return "/secret/secret.xhtml?faces-redirect=true";
         } else {
@@ -72,12 +75,16 @@ public class CustomerManagedBean implements Serializable {
     }
 
     public String logout() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loggedinCustomer");
+    // Invalidate the session to remove all session data
+    FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         setEmail(null);
         setPassword(null);
         return "/index.xhtml?faces-redirect=true";
     }
 
     public String saveCustomerDetails() {
+        
         try {
             // Assume that a customerService exists to handle database operations
             // and that the current user's ID is available via a method getUserId()
@@ -111,7 +118,7 @@ public class CustomerManagedBean implements Serializable {
 
     public String editCustomer() {
         loadCustomer();
-        System.out.println(this.firstname);
+        //System.out.println(this.firstname);
         return "editCustomer.xhtml";
     }
 
@@ -211,5 +218,14 @@ public class CustomerManagedBean implements Serializable {
     public void setConfirmpassword(String confirmpassword) {
         this.confirmpassword = confirmpassword;
     }
+
+    public Long getcId() {
+        return cId;
+    }
+
+    public void setcId(Long cId) {
+        this.cId = cId;
+    }
+    
 
 }
