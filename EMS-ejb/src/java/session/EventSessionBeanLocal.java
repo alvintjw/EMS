@@ -26,5 +26,11 @@ public interface EventSessionBeanLocal {
     public Event getEvent(Long eId) throws NoResultException;
 
     public void updateEvent(Event e) throws NoResultException;
+
+    public void deleteEvent(Long eId) throws NoResultException;
+
+    public void unregisterEvent(Long eId, Long cId) throws NoResultException;
+
+    public void registerEvent(Long eId, Long cId) throws NoResultException;
     
 }

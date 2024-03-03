@@ -30,8 +30,8 @@ public interface CustomerSessionLocal {
 
     public void updateCustomer(Customer c) throws NoResultException;
 
-    public List<Event> eventsRegistered(Customer c) throws NoResultException;
+    public List<Event> eventsRegistered(Long cId) throws NoResultException;
 
-    public List<Event> eventsAttended(Customer c) throws NoResultException;
+    public List<Event> eventsAttended(Long cId) throws NoResultException;
 
 }

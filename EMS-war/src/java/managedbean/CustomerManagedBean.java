@@ -63,6 +63,8 @@ public class CustomerManagedBean implements Serializable {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Login Successful", "Welcome back!"));
             System.out.println("From Customer Managed Bean: " + loggedinCustomer.getId());
             cId = loggedinCustomer.getId();
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedCustomerId", this.loggedinCustomer.getId());
+
             return "homepage.xhtml";
             //return "/secret/secret.xhtml?faces-redirect=true";
         } else {

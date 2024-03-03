@@ -13,20 +13,20 @@
             <p:toolbar>
                 <f:facet name="left">
                     <h:graphicImage name="logo.png" library="images" width="60px" alt="Logo"/>
-                     <p:inputText placeholder="Search..." style = "margin-left:20px"/>
+                    <p:inputText placeholder="Search..." style = "margin-left:20px"/>
                     <p:commandButton  action="#{searchManagedBean.search}" icon="fa fa-fw fa-search" />    
                 </f:facet>
-            
+
                 <f:facet name="right">
-                    
-       <!--                <h:button value="Find Events" outcome="/findEvents.xhtml" styleClass="header-button"/>
-                                <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/>-->
+
+                    <!--                <h:button value="Find Events" outcome="/findEvents.xhtml" styleClass="header-button"/>
+                                             <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/>-->
                     <p:commandButton value="Login" action="/login.xhtml" icon="pi pi-sign-in"  />
                     <p:commandButton value="Sign Up" action="/signup.xhtml" icon="pi pi-user-plus" />
                 </f:facet>
             </p:toolbar>
-            
-               <p:dataTable var="event" value="#{eventManagedBean.availableEvents}"
+
+            <p:dataTable var="event" value="#{eventManagedBean.availableEvents}"
                          emptyMessage="No events available to attend.">
                 <f:facet name="header">
                     Available Events
@@ -55,7 +55,7 @@
                 <p:column headerText="Actions">
                     <!-- You can put buttons or links here for actions like 'View', 'Register', etc. -->
                     <p:commandButton value="View" />
-                    <p:commandButton value="Register"/>
+                    <p:commandButton value="Register" action="login.xhtml?faces-redirect=true" />
                 </p:column>
             </p:dataTable>
         </h:form>

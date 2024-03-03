@@ -94,14 +94,14 @@ public class CustomerSession implements CustomerSessionLocal {
     }
     
     @Override
-    public List<Event> eventsRegistered(Customer c) throws NoResultException {
-        Customer cust = getCustomer(c.getId());
+    public List<Event> eventsRegistered(Long cId) throws NoResultException {
+        Customer cust = getCustomer(cId);
         return cust.getEventsHost();
     }
     
     @Override
-    public List<Event> eventsAttended(Customer c) throws NoResultException {
-        Customer cust = getCustomer(c.getId());
+    public List<Event> eventsAttended(Long cId) throws NoResultException {
+        Customer cust = getCustomer(cId);
         return cust.getEventsAttend();
     }
 

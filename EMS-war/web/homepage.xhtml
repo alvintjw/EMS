@@ -30,14 +30,14 @@
 
                     <h:graphicImage name="blankprofilepicture.png" library="images" width="60px" alt="Logo"/>
                     <p:menuButton value="#{customerManagedBean.fullname}">
-                         <p:menuitem value="View My Events" action ="#{customerManagedBean.editCustomer}" />
+                        <p:menuitem value="View My Events" action ="#{eventManagedBean.viewEvents}" />
                         <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}"  />
                         <p:menuitem value="Log Out"  action="#{customerManagedBean.logout}"  />
                     </p:menuButton>
                 </f:facet>
             </p:toolbar>
-            
-               <p:dataTable var="event" value="#{eventManagedBean.availableEvents}"
+
+            <p:dataTable var="event" value="#{eventManagedBean.availableEvents}"
                          emptyMessage="No events available to attend.">
                 <f:facet name="header">
                     Available Events
@@ -63,9 +63,15 @@
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Actions">
-                    <!-- You can put buttons or links here for actions like 'View', 'Register', etc. -->
-                    <p:commandButton value="View" />
-                    <p:commandButton value="Register"/>
+                    <p:commandButton value="View" action="#{eventManagedBean.viewEvent(event.id)}" />
+                    <p:commandButton rendered="#{eventManagedBean.isCustomerRegistered(event.id)}" 
+                                     value="Unregister" 
+                                     action="#{eventManagedBean.unregisterEvent(event.id,customerManagedBean.cId)}" 
+                                     update="@form"/>
+                    <p:commandButton rendered="#{not eventManagedBean.isCustomerRegistered(event.id)}" 
+                                     value="Register" 
+                                     action="#{eventManagedBean.registerEvent(event.id, customerManagedBean.cId)}" 
+                                     update="@form"/>
                 </p:column>
             </p:dataTable>
         </h:form>

@@ -37,7 +37,6 @@ public class EventManagedBean implements Serializable {
 
     @EJB
     private EventSessionBeanLocal eventSessionBean;
-    
 
     private String eventTitle;
     @Temporal(TemporalType.DATE)
@@ -50,10 +49,9 @@ public class EventManagedBean implements Serializable {
     private Customer loggedinCustomer;
 
     private List<Event> availableEvents;
-    
+
     private List<Event> hostedEvents;
     private List<Event> registeredEvents;
-
 
     /**
      * Creates a new instance of EventManagedBean
@@ -64,7 +62,7 @@ public class EventManagedBean implements Serializable {
     @PostConstruct
     public void init() {
         availableEvents = eventSessionBean.getAvailableEvents();
-       
+
     }
 
     public String handleSearch() {
@@ -83,57 +81,121 @@ public class EventManagedBean implements Serializable {
 //        String cIdStr = params.get("cId");
 //        System.out.println(cIdStr);
         //Long cId = Long.parseLong(cIdStr);
-        
+
         Event newEvent = new Event();
-        
+
         newEvent.setEventTitle(getEventTitle());
         newEvent.setEventDate(getEventDate());
         newEvent.setEventDateline(getEventDateline());
         newEvent.setEventLocation(getEventLocation());
         newEvent.setEventDesc(getEventDesc());
         try {
-           
+
             eventSessionBean.createEvent(newEvent, cId);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Your event has been created."));
             handleSearch();
             return "homepage.xhtml";
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "There was an error registering your event!"));
             return null;
         }
     }
-    
-    
-     public String navigateToFindEvents() {
+
+    public String navigateToFindEvents() {
         // Logic to navigate to find events page. This method can return a navigation outcome.
-        return "findEvents.xhtml" ;
+        return "findEvents.xhtml";
     }
-    
+
     public String navigateToCreateEvents() {
         // Logic to navigate to create events page. This method can return a navigation outcome.
         return "createEvents.xhtml";
     }
-    
-     public void loadHostedEvents() {  
+
+    public void loadHostedEvents() {
+        cId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedCustomerId");
+
         try {
-            hostedEvents = customerSession.eventsRegistered(loggedinCustomer);
+            hostedEvents = customerSession.eventsRegistered(cId);
         } catch (exceptions.NoResultException ex) {
             Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-       
     }
 
     public void loadRegisteredEvents() {
+        cId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedCustomerId");
+
         try {
-            registeredEvents = customerSession.eventsAttended(loggedinCustomer);
+            registeredEvents = customerSession.eventsAttended(cId);
         } catch (exceptions.NoResultException ex) {
             Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void deleteEvent(Long eId) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            eventSessionBean.deleteEvent(eId);
+        } catch (Exception e) {
+            //show with an error icon
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to delete event"));
+            return;
+        }
+        context.addMessage(null, new FacesMessage("Success", "Successfully deleted event"));
+        viewEvents();
+
+    }
+
+    public String viewEvents() {
+        loadRegisteredEvents();
+        loadHostedEvents();
+        return "ViewMyEvents.xhtml";
+    }
+
+    public boolean isCustomerRegistered(Long eventId) {
+        cId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedCustomerId");
+        try {
+            loggedinCustomer = customerSession.getCustomer(cId);
+        } catch (exceptions.NoResultException ex) {
+            Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (loggedinCustomer != null && loggedinCustomer.getEventsAttend() != null) {
+            for (Event registeredEvent : loggedinCustomer.getEventsAttend()) {
+                if (registeredEvent.getId().equals(eventId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public String registerEvent(Long eId, Long cId) {
+         FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            eventSessionBean.registerEvent(eId, cId);
+        } catch (exceptions.NoResultException ex) {
+            Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to register event"));
+        }
+        context.addMessage(null, new FacesMessage("Success", "Successfully registered event"));
+       return viewEvents();
+    }
+    
+    public String unregisterEvent(Long eId, Long cId) {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        try {
+            eventSessionBean.unregisterEvent(eId, cId);
+        } catch (exceptions.NoResultException ex) {
+            Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to unregister event"));
+        }
+        context.addMessage(null, new FacesMessage("Success", "Successfully unregistered event"));
+        
+        return viewEvents();
     }
 
     public String getEventTitle() {
@@ -215,9 +277,5 @@ public class EventManagedBean implements Serializable {
     public void setRegisteredEvents(List<Event> registeredEvents) {
         this.registeredEvents = registeredEvents;
     }
-    
-    
-    
-    
 
 }
