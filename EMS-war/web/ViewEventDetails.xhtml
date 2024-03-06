@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Event Details</title>
+    </h:head>
+    <h:body>
+        <h:form>
+             <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                        <p:graphicImage name="logo.png" library="images" style= "width:60px"/>
+                    </h:link>
+            <h:panelGrid columns="2">
+                <h:outputText value="Event Title: " />
+                <h:outputText value="#{eventManagedBean.selectedEvent.eventTitle}" />
+                <h:outputText value="Event Date: " />
+                <h:outputText value="#{eventManagedBean.selectedEvent.eventDate}">
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:MM" />
+                </h:outputText>
+                <h:outputText value="Event Location " />
+                <h:outputText value="#{eventManagedBean.selectedEvent.eventLocation}" />
+                <h:outputText value="Event Description " />
+                <h:outputText value="#{eventManagedBean.selectedEvent.eventDesc}" />
+                <h:outputText value="Event Deadline " />
+               <h:outputText value="#{eventManagedBean.selectedEvent.eventDateline}">
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:MM" />
+                </h:outputText>
+                <!-- Repeat for other event details: Date, Location, Description, etc. -->
+            </h:panelGrid>
+
+            <p:dataTable var="attendee" value="#{eventManagedBean.selectedEvent.customerAttend}">
+                <p:column headerText="Attendee Name">
+                    <h:outputText value="#{attendee.firstname} #{attendee.lastname}" />
+                </p:column>
+                <p:column headerText="Mark Attendance">
+                      <p:selectBooleanCheckbox value="#{eventManagedBean.attendeesAttendance[attendee.id]}" />
+                </p:column>
+            </p:dataTable>
+            
+            <p:commandButton value="Save Attendance" action="#{eventManagedBean.saveAttendance}" update="@form" />
+
+
+        </h:form>
+    </h:body>
+</html>

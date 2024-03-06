@@ -5,7 +5,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,21 +38,11 @@ public class Customer implements Serializable {
     private String lastname;
     private String password;
     
-
-//    @Temporal(TemporalType.DATE)
-//    private Date dob;
-//
-//    @Temporal(TemporalType.DATE)
-//    private Date joined;
-
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    private ArrayList<Contact> contacts;
-    
     @OneToMany(mappedBy="host", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    private ArrayList<Event> eventsHost;
+    private List<Event> eventsHost;
     
     @ManyToMany(mappedBy= "customerAttend",cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    private ArrayList<Event> eventsAttend;
+    private List<Event> eventsAttend;
 
 
     public Long getId() {
@@ -155,43 +145,32 @@ public class Customer implements Serializable {
     /**
      * @return the contacts
      */
-    public ArrayList<Contact> getContacts() {
-        return contacts;
-    }
-
-    /**
-     * @param contacts the contacts to set
-     */
-    public void setContacts(ArrayList<Contact> contacts) {
-        this.contacts = contacts;
-    }
-    
-    
+ 
     /**
      * @return the eventsHost
      */
-    public ArrayList<Event> getEventsHost() {
+    public List<Event> getEventsHost() {
         return eventsHost;
     }
 
     /**
      * @param eventsHost the eventsHost to set
      */
-    public void setEventsHost(ArrayList<Event> eventsHost) {
+    public void setEventsHost(List<Event> eventsHost) {
         this.eventsHost = eventsHost;
     }
 
     /**
      * @return the eventsAttend
      */
-    public ArrayList<Event> getEventsAttend() {
+    public List<Event> getEventsAttend() {
         return eventsAttend;
     }
 
     /**
      * @param eventsAttend the eventsAttend to set
      */
-    public void setEventsAttend(ArrayList<Event> eventsAttend) {
+    public void setEventsAttend(List<Event> eventsAttend) {
         this.eventsAttend = eventsAttend;
     }
 

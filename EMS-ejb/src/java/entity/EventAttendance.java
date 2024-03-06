@@ -9,23 +9,36 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *
  * @author alvintjw
  */
 @Entity
-public class Contact implements Serializable {
+public class EventAttendance implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
-    private String phone;
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
 
+    private boolean isPresent;
+
+    public EventAttendance() {
+    }
+
+    
 
     public Long getId() {
         return id;
@@ -34,36 +47,6 @@ public class Contact implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-    
-    /**
-     * @return the phone
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * @param phone the phone to set
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    /**
-     * @return the email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
 
     @Override
     public int hashCode() {
@@ -75,10 +58,10 @@ public class Contact implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Contact)) {
+        if (!(object instanceof EventAttendance)) {
             return false;
         }
-        Contact other = (Contact) object;
+        EventAttendance other = (EventAttendance) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -87,7 +70,33 @@ public class Contact implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Contact[ id=" + id + " ]";
+        return "entity.EventAttendance[ id=" + id + " ]";
     }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public boolean isIsPresent() {
+        return isPresent;
+    }
+
+    public void setIsPresent(boolean isPresent) {
+        this.isPresent = isPresent;
+    }
+    
+    
     
 }

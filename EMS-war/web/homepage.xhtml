@@ -13,7 +13,9 @@
             <h:outputText value="cId param: #{customerManagedBean.cId}" />
             <p:toolbar>
                 <f:facet name="left">
-                    <h:graphicImage name="logo.png" library="images" width="60px" alt="Logo"/>
+                   <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                        <p:graphicImage name="logo.png" library="images" style= "width:60px"/>
+                    </h:link>
                     <p:inputText placeholder="Search..." style = "margin-left:20px"/>
                     <p:commandButton  action="#{searchManagedBean.search}" icon="fa fa-fw fa-search" />    
                 </f:facet>
@@ -30,9 +32,9 @@
 
                     <h:graphicImage name="blankprofilepicture.png" library="images" width="60px" alt="Logo"/>
                     <p:menuButton value="#{customerManagedBean.fullname}">
-                        <p:menuitem value="View My Events" action ="#{eventManagedBean.viewEvents}" />
-                        <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}"  />
-                        <p:menuitem value="Log Out"  action="#{customerManagedBean.logout}"  />
+                        <p:menuitem value="View My Events" action ="#{eventManagedBean.viewEvents}" icon="fa fa-fw fa-calendar-o" />
+                        <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}"  icon="fa fa-fw fa-edit"/>
+                        <p:menuitem value="Log Out"  action="#{customerManagedBean.logout}"  icon ="fa fa-fw fa-sign-out"/>
                     </p:menuButton>
                 </f:facet>
             </p:toolbar>
@@ -63,7 +65,7 @@
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Actions">
-                    <p:commandButton value="View" action="#{eventManagedBean.viewEvent(event.id)}" />
+                    <p:commandButton action="#{eventManagedBean.viewEvent(event.id)}" icon="fa fa-fw fa-search" />
                     <p:commandButton rendered="#{eventManagedBean.isCustomerRegistered(event.id)}" 
                                      value="Unregister" 
                                      action="#{eventManagedBean.unregisterEvent(event.id,customerManagedBean.cId)}" 
@@ -71,7 +73,8 @@
                     <p:commandButton rendered="#{not eventManagedBean.isCustomerRegistered(event.id)}" 
                                      value="Register" 
                                      action="#{eventManagedBean.registerEvent(event.id, customerManagedBean.cId)}" 
-                                     update="@form"/>
+                                     update="@form"
+                                    />
                 </p:column>
             </p:dataTable>
         </h:form>

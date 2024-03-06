@@ -8,9 +8,11 @@
     </h:head>
     <h:body>
         <h:form>
-             <p:toolbar>
+            <p:toolbar>
                 <f:facet name="left">
-                    <h:graphicImage name="logo.png" library="images" width="60px" alt="Logo"/>
+                    <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                        <p:graphicImage name="logo.png" library="images" style= "width:60px"/>
+                    </h:link>
                     <p:inputText placeholder="Search..." style = "margin-left:20px"/>
                     <p:commandButton  action="#{searchManagedBean.search}" icon="fa fa-fw fa-search" />    
                 </f:facet>
@@ -27,14 +29,14 @@
 
                     <h:graphicImage name="blankprofilepicture.png" library="images" width="60px" alt="Logo"/>
                     <p:menuButton value="#{customerManagedBean.fullname}">
-                         <p:menuitem value="View My Events" action ="#{eventManagedBean.viewEvents}" />
+                        <p:menuitem value="View My Events" action ="#{eventManagedBean.viewEvents}" />
                         <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}"  />
                         <p:menuitem value="Log Out"  action="#{customerManagedBean.logout}"  />
                     </p:menuButton>
                 </f:facet>
             </p:toolbar>
-            
-            
+
+
             <p:growl id="growl" life="3000"/>
 
             <h:panelGrid columns="1" style="width:100%; margin-bottom:20px;">
@@ -61,9 +63,9 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Actions">
-                            <p:commandButton value="View Details" action="#{eventManagedBean.viewDetails(event.id)}" icon="pi pi-search" />
-                            <p:commandButton value="Edit" action="#{eventManagedBean.editEvent(event.id)}" icon="pi pi-pencil" />
-                            <p:commandButton value="Delete" action="#{eventManagedBean.deleteEvent(event.id)}" update="@form" icon="pi pi-trash" />
+                            <p:commandButton  action="#{eventManagedBean.viewDetails(event.id)}" icon="fa fa-fw fa-search" />
+                            <p:commandButton action="#{eventManagedBean.editEvent(event.id)}" icon="fa fa-fw fa-edit" />
+                            <p:commandButton action="#{eventManagedBean.deleteEvent(event.id)}" update="@form" icon="fa fa-fw fa-remove" />
                         </p:column>
                     </p:dataTable>
                 </p:panel>
@@ -91,8 +93,8 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Actions">
-                            <p:commandButton value="View Details" action="#{eventManagedBean.viewDetails(event.id)}" icon="pi pi-search" />
-                            <p:commandButton value="Unregister" action="#{eventManagedBean.unregisterEvent(event.id,customerManagedBean.cId)}" update="@form" icon="pi pi-times" />
+                            <p:commandButton action="#{eventManagedBean.viewDetails(event.id)}" icon="fa fa-fw fa-search" />
+                            <p:commandButton value = "Unregister" action="#{eventManagedBean.unregisterEvent(event.id,customerManagedBean.cId)}" update="@form" icon="fa fa-fw fa-remove"/>
                         </p:column>
                     </p:dataTable>
                 </p:panel>

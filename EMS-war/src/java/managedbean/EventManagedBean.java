@@ -10,7 +10,9 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -18,10 +20,10 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.persistence.NoResultException;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import session.CustomerSessionLocal;
+import session.EventAttendanceSessionBeanLocal;
 import session.EventSessionBeanLocal;
 
 /**
@@ -31,6 +33,9 @@ import session.EventSessionBeanLocal;
 @Named(value = "eventManagedBean")
 @SessionScoped
 public class EventManagedBean implements Serializable {
+
+    @EJB
+    private EventAttendanceSessionBeanLocal eventAttendanceSessionBean;
 
     @EJB
     private CustomerSessionLocal customerSession;
@@ -53,6 +58,10 @@ public class EventManagedBean implements Serializable {
     private List<Event> hostedEvents;
     private List<Event> registeredEvents;
 
+    private Event selectedEvent;
+    private List<Customer> customerAttend;
+    private Map<Long, Boolean> attendeesAttendance = new HashMap<>();
+
     /**
      * Creates a new instance of EventManagedBean
      */
@@ -62,6 +71,14 @@ public class EventManagedBean implements Serializable {
     @PostConstruct
     public void init() {
         availableEvents = eventSessionBean.getAvailableEvents();
+        if (selectedEvent != null && selectedEvent.getCustomerAttend() != null) {
+            System.out.println("I AM IN INIT");
+            attendeesAttendance.clear(); // Clear previous values
+            for (Customer attendee : selectedEvent.getCustomerAttend()) {
+                // Populate the map with true/false based on whether each attendee is marked as present
+                attendeesAttendance.put(attendee.getId(), checkIfAttendeeIsPresentForEvent(attendee.getId(), selectedEvent.getId()));
+            }
+        }
 
     }
 
@@ -137,18 +154,22 @@ public class EventManagedBean implements Serializable {
     public void deleteEvent(Long eId) {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
+            eventAttendanceSessionBean.deleteAttendance(eId);
             eventSessionBean.deleteEvent(eId);
+
         } catch (Exception e) {
             //show with an error icon
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to delete event"));
             return;
         }
-        context.addMessage(null, new FacesMessage("Success", "Successfully deleted event"));
+        context.addMessage(null, new FacesMessage("Successfully deleted event", "Successfully deleted event"));
+        init();
         viewEvents();
 
     }
 
     public String viewEvents() {
+        init();
         loadRegisteredEvents();
         loadHostedEvents();
         return "ViewMyEvents.xhtml";
@@ -161,7 +182,7 @@ public class EventManagedBean implements Serializable {
         } catch (exceptions.NoResultException ex) {
             Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         if (loggedinCustomer != null && loggedinCustomer.getEventsAttend() != null) {
             for (Event registeredEvent : loggedinCustomer.getEventsAttend()) {
                 if (registeredEvent.getId().equals(eventId)) {
@@ -171,31 +192,72 @@ public class EventManagedBean implements Serializable {
         }
         return false;
     }
-    
+
     public String registerEvent(Long eId, Long cId) {
-         FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
         try {
             eventSessionBean.registerEvent(eId, cId);
+            eventAttendanceSessionBean.createAttendance(eId, cId);
         } catch (exceptions.NoResultException ex) {
             Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to register event"));
         }
         context.addMessage(null, new FacesMessage("Success", "Successfully registered event"));
-       return viewEvents();
+        return viewEvents();
     }
-    
+
     public String unregisterEvent(Long eId, Long cId) {
         FacesContext context = FacesContext.getCurrentInstance();
 
         try {
             eventSessionBean.unregisterEvent(eId, cId);
+            eventAttendanceSessionBean.deleteAttendance(eId, cId);
         } catch (exceptions.NoResultException ex) {
             Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to unregister event"));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Unable to unregister event"));
         }
         context.addMessage(null, new FacesMessage("Success", "Successfully unregistered event"));
-        
+
         return viewEvents();
+    }
+
+    public String viewDetails(Long eId) {
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        try {
+            selectedEvent = eventSessionBean.getEvent(eId);
+
+            return "ViewEventDetails.xhtml";
+        } catch (exceptions.NoResultException ex) {
+            Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        init();
+
+        return "homepage.xhtml";
+
+    }
+
+    public String markAttendance(Long cId, Long eId, Boolean isPresent) {
+        eventAttendanceSessionBean.markAttendance(eId, cId, isPresent);
+        return "ViewEventDetails.xhtml";
+    }
+
+    public String saveAttendance() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        attendeesAttendance.forEach((attendeeId, isPresent) -> {
+            // Update attendance status in the database
+            // This may involve finding the EventAttendance record by event and attendee ID
+            // and updating its 'isPresent' status.
+            markAttendance(attendeeId, selectedEvent.getId(), isPresent);
+        });
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Attendance saved successfully."));
+        init();
+        return "ViewEventDetails.xhtml";
+    }
+    
+    public boolean checkIfAttendeeIsPresentForEvent(Long cId, Long eId) {
+        return eventAttendanceSessionBean.checkAttendance(cId, eId);
     }
 
     public String getEventTitle() {
@@ -276,6 +338,30 @@ public class EventManagedBean implements Serializable {
 
     public void setRegisteredEvents(List<Event> registeredEvents) {
         this.registeredEvents = registeredEvents;
+    }
+
+    public Event getSelectedEvent() {
+        return selectedEvent;
+    }
+
+    public void setSelectedEvent(Event selectedEvent) {
+        this.selectedEvent = selectedEvent;
+    }
+
+    public List<Customer> getCustomerAttend() {
+        return customerAttend;
+    }
+
+    public void setCustomerAttend(List<Customer> customerAttend) {
+        this.customerAttend = customerAttend;
+    }
+
+    public Map<Long, Boolean> getAttendeesAttendance() {
+        return attendeesAttendance;
+    }
+
+    public void setAttendeesAttendance(Map<Long, Boolean> attendeesAttendance) {
+        this.attendeesAttendance = attendeesAttendance;
     }
 
 }
