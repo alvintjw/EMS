@@ -8,9 +8,15 @@
     </h:head>
     <h:body>
         <h:form>
-             <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
-                        <p:graphicImage name="logo.png" library="images" style= "width:60px"/>
-                    </h:link>
+            <f:metadata>
+                <!-- to get the cId and bind it to a cId in managed bean -->
+                <f:viewParam name="eId" value="#{eventManagedBean.eventId}" />
+                <!-- load the selected customer -->
+                <f:event type="preRenderView" listener="#{eventManagedBean.loadSelectedEvent}"/>
+            </f:metadata>
+            <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                <p:graphicImage name="logo.png" library="images" style= "width:60px"/>
+            </h:link>
             <h:panelGrid columns="2">
                 <h:outputText value="Event Title: " />
                 <h:outputText value="#{eventManagedBean.selectedEvent.eventTitle}" />
@@ -23,7 +29,7 @@
                 <h:outputText value="Event Description " />
                 <h:outputText value="#{eventManagedBean.selectedEvent.eventDesc}" />
                 <h:outputText value="Event Deadline " />
-               <h:outputText value="#{eventManagedBean.selectedEvent.eventDateline}">
+                <h:outputText value="#{eventManagedBean.selectedEvent.eventDateline}">
                     <f:convertDateTime pattern="dd/MM/yyyy HH:MM" />
                 </h:outputText>
                 <!-- Repeat for other event details: Date, Location, Description, etc. -->
@@ -34,10 +40,10 @@
                     <h:outputText value="#{attendee.firstname} #{attendee.lastname}" />
                 </p:column>
                 <p:column headerText="Mark Attendance">
-                      <p:selectBooleanCheckbox value="#{eventManagedBean.attendeesAttendance[attendee.id]}" />
+                    <p:selectBooleanCheckbox value="#{eventManagedBean.attendeesAttendance[attendee.id]}" />
                 </p:column>
             </p:dataTable>
-            
+
             <p:commandButton value="Save Attendance" action="#{eventManagedBean.saveAttendance}" update="@form" />
 
 

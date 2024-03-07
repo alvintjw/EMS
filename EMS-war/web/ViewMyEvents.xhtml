@@ -8,6 +8,7 @@
     </h:head>
     <h:body>
         <h:form>
+            <h:outputText value="cId param: #{authenticationManagedBean.cId}" />
             <p:toolbar>
                 <f:facet name="left">
                     <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
@@ -19,11 +20,11 @@
 
                 <f:facet name="right">                
                     <p:commandButton value="Find Events" action="#{eventManagedBean.navigateToFindEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button">
-                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{customerManagedBean.cId}" />
+                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{authenticationManagedBean.cId}" />
                     </p:commandButton>
 
                     <p:commandButton value="Create Events" action="#{eventManagedBean.navigateToCreateEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button">
-                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{customerManagedBean.cId}" />
+                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{authenticationManagedBean.cId}" />
                     </p:commandButton>
                     <!--                    <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/>-->
 
@@ -63,7 +64,9 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Actions">
-                            <p:commandButton  action="#{eventManagedBean.viewDetails(event.id)}" icon="fa fa-fw fa-search" />
+                            <p:button icon="fa fa-fw fa-search" title="View" outcome="ViewEventDetails">
+                                <f:param name="eId" value="#{event.id}" />
+                            </p:button>
                             <p:commandButton action="#{eventManagedBean.editEvent(event.id)}" icon="fa fa-fw fa-edit" />
                             <p:commandButton action="#{eventManagedBean.deleteEvent(event.id)}" update="@form" icon="fa fa-fw fa-remove" />
                         </p:column>

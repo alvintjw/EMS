@@ -10,7 +10,7 @@
     </h:head>
     <h:body>
         <h:form>
-            <h:outputText value="cId param: #{customerManagedBean.cId}" />
+            <h:outputText value="cId param: #{authenticationManagedBean.cId}" />
             <p:toolbar>
                 <f:facet name="left">
                    <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
@@ -22,11 +22,11 @@
 
                 <f:facet name="right">                
                     <p:commandButton value="Find Events" action="#{eventManagedBean.navigateToFindEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button">
-                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{customerManagedBean.cId}" />
+                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{authenticationManagedBean.cId}" />
                     </p:commandButton>
 
                     <p:commandButton value="Create Events" action="#{eventManagedBean.navigateToCreateEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button">
-                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{customerManagedBean.cId}" />
+                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{authenticationManagedBean.cId}" />
                     </p:commandButton>
                     <!--                    <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/>-->
 
@@ -34,7 +34,7 @@
                     <p:menuButton value="#{customerManagedBean.fullname}">
                         <p:menuitem value="View My Events" action ="#{eventManagedBean.viewEvents}" icon="fa fa-fw fa-calendar-o" />
                         <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}"  icon="fa fa-fw fa-edit"/>
-                        <p:menuitem value="Log Out"  action="#{customerManagedBean.logout}"  icon ="fa fa-fw fa-sign-out"/>
+                        <p:menuitem value="Log Out"  action="#{authenticationManagedBean.logout}"  icon ="fa fa-fw fa-sign-out"/>
                     </p:menuButton>
                 </f:facet>
             </p:toolbar>
@@ -68,11 +68,11 @@
                     <p:commandButton action="#{eventManagedBean.viewEvent(event.id)}" icon="fa fa-fw fa-search" />
                     <p:commandButton rendered="#{eventManagedBean.isCustomerRegistered(event.id)}" 
                                      value="Unregister" 
-                                     action="#{eventManagedBean.unregisterEvent(event.id,customerManagedBean.cId)}" 
+                                     action="#{eventManagedBean.unregisterEvent(event.id,authenticationManagedBean.cId)}" 
                                      update="@form"/>
                     <p:commandButton rendered="#{not eventManagedBean.isCustomerRegistered(event.id)}" 
                                      value="Register" 
-                                     action="#{eventManagedBean.registerEvent(event.id, customerManagedBean.cId)}" 
+                                     action="#{eventManagedBean.registerEvent(event.id, authenticationManagedBean.cId)}" 
                                      update="@form"
                                     />
                 </p:column>

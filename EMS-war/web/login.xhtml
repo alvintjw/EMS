@@ -15,12 +15,12 @@
             
             <p:panel header="Login to Alvin's EMS" style="margin-top:10px;">
                 <p:outputLabel for="email" value="Email:" style="margin-top:20px;"/>
-                <p:inputText id="email" value="#{customerManagedBean.email}" style="width:100%;" />
+                <p:inputText id="email" value="#{authenticationManagedBean.email}" style="width:100%;" />
                 
                 <p:outputLabel for="password" value="Password:" style="margin-top:10px;"/>
-                <p:password id="password" value="#{customerManagedBean.password}" style="width:100%;" feedback="false"/>
+                <p:password id="password" value="#{authenticationManagedBean.password}" style="width:100%;" feedback="false"/>
                 
-                <p:commandButton value="Login" action="#{customerManagedBean.login}" styleClass="ui-button-primary" style="margin-top:20px; width:100%;" update= "growl"/>
+                <p:commandButton value="Login" action="#{authenticationManagedBean.login}" styleClass="ui-button-primary" style="margin-top:20px; width:100%;" update= "growl"/>
                 <p:commandButton value="Sign Up" action="/signup.xhtml" styleClass="ui-button-primary" style="margin-top:20px; width:100%;"/>
             </p:panel>
         </h:form>

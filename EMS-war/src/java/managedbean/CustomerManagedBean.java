@@ -10,9 +10,12 @@ import javax.inject.Named;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+
+import javax.faces.view.ViewScoped;
+
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import org.primefaces.model.file.UploadedFile;
 import session.CustomerSessionLocal;
 
@@ -21,7 +24,7 @@ import session.CustomerSessionLocal;
  * @author alvintjw
  */
 @Named(value = "customerManagedBean")
-@SessionScoped
+@ViewScoped
 public class CustomerManagedBean implements Serializable {
 
     @EJB
@@ -37,11 +40,19 @@ public class CustomerManagedBean implements Serializable {
     private String password;
     private String confirmpassword;
     private Customer loggedinCustomer;
-     private Long cId;
+    private Long cId;
 
+     
+     
+    @Inject
+    private AuthenticationManagedBean authenBean;
+
+     
     @PostConstruct
     public void init() {
         profilePhotoName = "/resources/images/blankprofilepicture.png";
+        loggedinCustomer = authenBean.getLoggedinCustomer();
+        loadCustomer();
     }
 
     public String login() {
@@ -125,6 +136,7 @@ public class CustomerManagedBean implements Serializable {
     }
 
     public void loadCustomer() {
+        cId = loggedinCustomer.getId();
         email = loggedinCustomer.getEmail();
         firstname = loggedinCustomer.getFirstname();
         contactNumber = loggedinCustomer.getContactnumber();

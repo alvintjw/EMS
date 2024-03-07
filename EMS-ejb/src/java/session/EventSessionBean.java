@@ -60,6 +60,7 @@ public class EventSessionBean implements EventSessionBeanLocal {
         e.setHost(cust);
         cust.getEventsHost().add(e);
         em.persist(e);
+        System.out.println("IN EventSessionBean. Customer eventsHost: " + cust.getEventsHost().get(0).getEventTitle());
     }
 
     @Override
