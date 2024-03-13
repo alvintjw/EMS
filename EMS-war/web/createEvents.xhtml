@@ -21,9 +21,9 @@
                     <p:inputText id="title" value="#{eventManagedBean.eventTitle}" required="true" label="Title" />
 
                     <p:outputLabel for="date" value="Date of Event:" />
-                    <p:calendar id="date" value="#{eventManagedBean.eventDate}" pattern="dd/MM/yyyy HH:mm" required="true" label="Date and Time of Event" showOn="button" />
+                    <p:calendar id="date" value="#{eventManagedBean.eventDate}" pattern="dd/MM/yyyy HH:mm" required="true" label="Date and Time of Event" showOn="button" mindate="#{eventManagedBean.currentDateTime}"/>
                     <p:outputLabel for="deadline" value="Registration Deadline:" />
-                    <p:calendar id="deadline" value="#{eventManagedBean.eventDateline}" pattern="dd/MM/yyyy HH:mm" required="true" showOn="button" label="Registration Deadline" />
+                    <p:calendar id="deadline" value="#{eventManagedBean.eventDateline}" pattern="dd/MM/yyyy HH:mm" required="true" showOn="button" label="Registration Deadline"  maxdate="#{eventManagedBean.eventDate}"/>
 
                     <p:outputLabel for="description" value="Description:" />
                     <p:inputTextarea id="description" value="#{eventManagedBean.eventDesc}" required="true" label="Description" />

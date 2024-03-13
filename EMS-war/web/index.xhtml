@@ -10,11 +10,10 @@
     </h:head>
     <h:body>
         <h:form>
+      
             <p:toolbar>
                 <f:facet name="left">
-                    <h:graphicImage name="logo.png" library="images" width="60px" alt="Logo"/>
-                    <p:inputText placeholder="Search..." style = "margin-left:20px"/>
-                    <p:commandButton  action="#{searchManagedBean.search}" icon="fa fa-fw fa-search" />    
+                    <h:graphicImage name="logo.png" library="images" width="60px" alt="Logo"/>  
                 </f:facet>
 
                 <f:facet name="right">
@@ -54,7 +53,7 @@
                 </p:column>
                 <p:column headerText="Actions">
                     <!-- You can put buttons or links here for actions like 'View', 'Register', etc. -->
-                    <p:commandButton value="View" />
+                    <p:commandButton value="View Details" action="login.xhtml?faces-redirect=true" />
                     <p:commandButton value="Register" action="login.xhtml?faces-redirect=true" />
                 </p:column>
             </p:dataTable>

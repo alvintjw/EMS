@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Edit Event Details</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <f:metadata>
+                <!-- to get the eId and bind it to an eId in managed bean -->
+                <f:viewParam name="eId" value="#{eventManagedBean.eventId}" />
+                <!-- load the selected event -->
+                <f:event type="preRenderView" listener="#{eventManagedBean.loadSelectedEvent}"/>
+            </f:metadata>
+            <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                <p:graphicImage name="logo.png" library="images" style= "width:60px"/>
+            </h:link>
+            <p:panel header="Edit Event Details"  style="margin-bottom: 20px;">
+                
+                <p:outputLabel for="eventTitle" value="Title: " style="font-weight: bold;"/>
+                <p:inputText id="eventTitle" value="#{eventManagedBean.eventTitle}" style="margin-bottom: 10px;"/>
+
+                <p:outputLabel for="eventDate" value="Date: " style="font-weight: bold;"/>
+                <p:calendar id="eventDate" value="#{eventManagedBean.eventDate}" pattern="dd/MM/yyyy HH:mm" showOn="button" style="margin-bottom: 10px;"/>
+
+                <p:outputLabel for="eventLocation" value="Location: " style="font-weight: bold;"/>
+                <p:inputText id="eventLocation" value="#{eventManagedBean.eventLocation}" style="margin-bottom: 10px;"/>
+
+                <p:outputLabel for="eventDesc" value="Description: " style="font-weight: bold;"/>
+                <p:inputTextarea id="eventDesc" value="#{eventManagedBean.eventDesc}" rows="2" cols="30" style="margin-bottom: 10px;"/>
+
+                <p:outputLabel for="eventDeadline" value="Deadline: " style="font-weight: bold;"/>
+                <p:calendar id="eventDeadline" value="#{eventManagedBean.eventDateline}" pattern="dd/MM/yyyy HH:mm" showOn="button" style="margin-bottom: 10px;"/>
+
+            </p:panel>
+             <p:commandButton value="Back" action ="#{eventManagedBean.viewEvents}"/>
+            <p:commandButton value="Save Changes" action="#{eventManagedBean.saveEventDetails}" update="@form" ajax="false"/>
+          
+        </h:form>
+    </h:body>
+</html>

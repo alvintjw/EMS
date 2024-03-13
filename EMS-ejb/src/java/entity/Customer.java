@@ -74,6 +74,7 @@ public class Customer implements Serializable {
     }
 
     public String getProfilePhotoName() {
+        
         return profilePhotoName;
     }
 

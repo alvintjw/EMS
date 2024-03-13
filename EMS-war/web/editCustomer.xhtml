@@ -5,7 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <title>Edit Customer Profile</title>
-</h:head>My 
+</h:head>
 <h:body>
 
     <h:form enctype="multipart/form-data" >
@@ -31,14 +31,17 @@
             <h:outputLabel for="contactDetails" value="Contact Details:" />
             <p:inputText id="contactDetails" value="#{customerManagedBean.contactNumber}"  label="Contact Details"/>
 
-            <h:outputLabel for="profilePhoto" value="Profile Photo:" />
-            <p:fileUpload id="profilePhoto" value="#{customerManagedBean.uploadedFile}" mode="simple" label="Choose" />
+            <h:inputFile value="#{customerManagedBean.uploadedfile}" />
+            <h:commandButton action="#{customerManagedBean.upload}" value="Upload" />
             
-            <p:commandButton value="Upload Photo" action="#{customerManagedBean.uploadProfilePhoto}" ajax="false"/>
-            <p:graphicImage value="#{customerManagedBean.profilePhotoName}" rendered="#{not empty customerManagedBean.profilePhotoName}" />
-            
-        </p:panelGrid>
+             <h:outputLabel  value="Current Photo: " /> 
+            <p:graphicImage value="#{customerManagedBean.profilePhotoName}" 
+                style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover; border: 1px solid #dcdcdc;" 
+                alt="Current Photo"/>
 
+
+        </p:panelGrid>
+         <p:button value="Back" outcome="/homepage.xhtml"/>
         <p:commandButton value="Save Changes" action="#{customerManagedBean.saveCustomerDetails}" ajax="false"/>
     </h:form>
 

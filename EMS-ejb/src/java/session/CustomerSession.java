@@ -91,6 +91,7 @@ public class CustomerSession implements CustomerSessionLocal {
         oldC.setEmail(c.getEmail());
         oldC.setContactnumber(c.getContactnumber());
         oldC.setProfilePicture(c.getProfilePicture());
+        oldC.setProfilePhotoName(c.getProfilePhotoName());
     }
     
     @Override

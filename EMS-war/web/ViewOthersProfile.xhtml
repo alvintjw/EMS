@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>View Others Profile</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <f:metadata>
+                <f:viewParam name="cId" value="#{customerManagedBean.selectedCustomerid}" />
+                <!-- load the selected customer -->
+                <f:event type="preRenderView" listener="#{customerManagedBean.loadSelectedCustomer}"/>
+            </f:metadata>
+            <p:toolbar>
+                <f:facet name="left">
+                    <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                        <p:graphicImage name="logo.png" library="images" style= "width:60px"/>
+                    </h:link>
+
+                </f:facet>
+
+                <f:facet name="right">                
+                    <p:commandButton value="Find Events" action="#{eventManagedBean.navigateToFindEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button">
+                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{authenticationManagedBean.cId}" />
+                    </p:commandButton>
+
+                    <p:commandButton value="Create Events" action="#{eventManagedBean.navigateToCreateEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button">
+                        <f:setPropertyActionListener target="#{eventManagedBean.cId}" value="#{authenticationManagedBean.cId}" />
+                    </p:commandButton>
+                    <!--                    <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/>-->
+
+                    <p:graphicImage value="#{customerManagedBean.profilePhotoName}" style="border-radius: 50%; border: 3px solid #ddd; box-shadow: 2px 2px 2px #ccc; width: 100px; height: 100px; object-fit: cover;" alt="Profile Picture"/>
+                    <p:menuButton value="#{customerManagedBean.fullname}">
+                        <p:menuitem value="View My Events" action ="#{eventManagedBean.viewEvents}" />
+                        <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}"  />
+                        <p:menuitem value="Log Out"  action="#{customerManagedBean.logout}"  />
+                    </p:menuButton>
+                </f:facet>
+            </p:toolbar>
+
+
+            <p:growl id="growl" life="3000"/>
+            <p:panelGrid columns="2" style="margin-bottom:20px; max-width:600px; margin:auto;" columnClasses="label,value">
+
+                <f:facet name="header">
+                    <h:outputText value="#{customerManagedBean.selectedCustomer.firstname} #{customerManagedBean.selectedCustomer.lastname}'s Profile" />
+                </f:facet>
+
+                <h:outputLabel value="First Name:" />
+                <h:outputText value="#{customerManagedBean.selectedCustomer.firstname}" style="font-weight:bold;"/>
+
+                <h:outputLabel value="Last Name:" />
+                <h:outputText value="#{customerManagedBean.selectedCustomer.lastname}" style="font-weight:bold;"/>
+
+                <h:outputLabel value="Email:" />
+                <h:outputText value="#{customerManagedBean.selectedCustomer.email}" style="font-weight:bold;"/>
+
+                <h:outputLabel value="Contact Details:" />
+                <h:outputText value="#{customerManagedBean.selectedCustomer.contactnumber}" style="font-weight:bold;"/>
+
+                <h:outputLabel value="Profile Photo:" />
+                <p:graphicImage value="#{customerManagedBean.selectedCustomerPhotoName}" 
+                                style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover; border: 1px solid #dcdcdc;" 
+                                alt="Profile Photo"/>
+
+            </p:panelGrid>
+             <p:commandButton value="Back" action ="#{eventManagedBean.viewEvents}"/>
+
+            <!--            <h:panelGrid columns="1" style="width:100%; margin-bottom:20px;">
+                            <p:panel header="Hosted Events" style="margin-bottom: 10px;">
+                                <p:dataTable var="event" value="#{eventManagedBean.hostedEvents}" emptyMessage="No events hosted.">
+            
+                                    <p:column headerText="Title">
+                                        <h:outputText value="#{event.eventTitle}" />
+                                    </p:column>
+                                    <p:column headerText="Date">
+                                        <h:outputText value="#{event.eventDate}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:MM" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Location">
+                                        <h:outputText value="#{event.eventLocation}" />
+                                    </p:column>
+                                    <p:column headerText="Description">
+                                        <h:outputText value="#{event.eventDesc}" />
+                                    </p:column>
+                                    <p:column headerText="Deadline">
+                                        <h:outputText value="#{event.eventDateline}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy " />
+                                        </h:outputText>
+                                    </p:column>
+                                  
+                                </p:dataTable>
+                            </p:panel>
+            
+                            <p:panel header="Registered Events" style="margin-bottom: 10px;">
+                                <p:dataTable var="event" value="#{eventManagedBean.registeredEvents}" emptyMessage="No events registered.">
+            
+                                    <p:column headerText="Title">
+                                        <h:outputText value="#{event.eventTitle}" />
+                                    </p:column>
+                                    <p:column headerText="Date">
+                                        <h:outputText value="#{event.eventDate}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:MM" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Location">
+                                        <h:outputText value="#{event.eventLocation}" />
+                                    </p:column>
+                                    <p:column headerText="Description">
+                                        <h:outputText value="#{event.eventDesc}" />
+                                    </p:column>
+                                    <p:column headerText="Deadline">
+                                        <h:outputText value="#{event.eventDateline}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy " />
+                                        </h:outputText>
+                                    </p:column>
+                       
+                                </p:dataTable>
+                            </p:panel>
+                        </h:panelGrid>-->
+        </h:form>
+    </h:body>
+</html>

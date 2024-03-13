@@ -41,6 +41,33 @@ public class EventSessionBean implements EventSessionBeanLocal {
     }
 
     @Override
+    public List<Event> searchEventsByLocation(String name) {
+        Query q;
+        if (name != null) {
+            q = em.createQuery("SELECT e FROM Event e WHERE "
+                    + "LOWER(e.eventLocation) LIKE :location");
+            q.setParameter("location", "%" + name.toLowerCase() + "%");
+        } else {
+            q = em.createQuery("SELECT e FROM Event e");
+        }
+
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Event> searchEventsByDate(Date date) {
+        Query q;
+        if (date != null) {
+            q = em.createQuery("SELECT e FROM Event e WHERE e.eventDate > :date");
+            q.setParameter("date", date);
+        } else {
+            q = em.createQuery("SELECT e FROM Event e");
+        }
+
+        return q.getResultList();
+    }
+
+    @Override
     public List<Event> getAvailableEvents() {
         // Get the current date without time
         Date currentDate = java.sql.Date.valueOf(LocalDate.now());
@@ -122,7 +149,7 @@ public class EventSessionBean implements EventSessionBeanLocal {
             throw new NoResultException("Customer/Event Not Found");
         }
     }
-    
+
     @Override
     public void unregisterEvent(Long eId, Long cId) throws NoResultException {
         Event e = em.find(Event.class, eId);
@@ -135,6 +162,52 @@ public class EventSessionBean implements EventSessionBeanLocal {
             throw new NoResultException("Customer/Event Not Found");
         }
 
+    }
+
+    @Override
+    public List<Event> searchEventsByTitleAndDate(String name, Date date) {
+        if (name == null) {
+            Date currDate = new Date();
+            System.out.println("currDate" + currDate);
+
+            return searchEventsByDate(new Date());
+        }
+        if (date == null) {
+            return searchEvents(name);
+        } else {
+            String queryString = "SELECT e FROM Event e WHERE LOWER(e.eventTitle) LIKE :title AND e.eventDate < :date";
+
+            Query q = em.createQuery(queryString);
+
+            // Set the parameters for the query
+            q.setParameter("title", "%" + name.toLowerCase() + "%");
+            q.setParameter("date", date);
+
+            return q.getResultList();
+
+        }
+    }
+
+    @Override
+    public List<Event> searchEventsByLocationAndDate(String name, Date date) {
+        if (name == null) {
+            return searchEventsByDate(date);
+        }
+        if (date == null) {
+            return searchEventsByLocation(name);
+        } else {
+            String queryString = "SELECT e FROM Event e WHERE LOWER(e.eventLocation) LIKE :location AND e.eventDate < :date";
+
+            // Create the query
+            Query q = em.createQuery(queryString);
+
+            // Set the parameters for the query
+            q.setParameter("location", "%" + name.toLowerCase() + "%");
+            q.setParameter("date", date);
+
+            return q.getResultList();
+
+        }
     }
 
     // Add business logic below. (Right-click in editor and choose

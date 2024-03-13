@@ -7,6 +7,7 @@ package session;
 import entity.Customer;
 import entity.Event;
 import exceptions.NoResultException;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -32,5 +33,13 @@ public interface EventSessionBeanLocal {
     public void unregisterEvent(Long eId, Long cId) throws NoResultException;
 
     public void registerEvent(Long eId, Long cId) throws NoResultException;
+
+    public List<Event> searchEventsByLocation(String name);
+
+    public List<Event> searchEventsByDate(Date date);
+
+    public List<Event> searchEventsByTitleAndDate(String name, Date date);
+
+    public List<Event> searchEventsByLocationAndDate(String name, Date date);
     
 }

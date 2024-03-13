@@ -10,6 +10,8 @@ import exceptions.NoResultException;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +20,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.persistence.Temporal;
@@ -58,9 +59,11 @@ public class EventManagedBean implements Serializable {
     private Customer loggedinCustomer;
 
     private List<Event> availableEvents;
-
     private List<Event> hostedEvents;
     private List<Event> registeredEvents;
+    private String searchType = "TITLE";
+    private String searchString;
+    private Date selectedDate = new Date();
 
     private Event selectedEvent;
     private List<Customer> customerAttend;
@@ -77,7 +80,7 @@ public class EventManagedBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        availableEvents = eventSessionBean.getAvailableEvents();
+
         loggedinCustomer = authenBean.getLoggedinCustomer();
 
         if (loggedinCustomer != null) {
@@ -94,11 +97,35 @@ public class EventManagedBean implements Serializable {
             }
         }
 
+        if (searchString == null || searchString.equals("")) {
+
+            availableEvents = eventSessionBean.searchEventsByTitleAndDate(null, selectedDate); // Assuming this method fetches all events
+        } else {
+            switch (searchType) {
+                case "TITLE":
+                    availableEvents = eventSessionBean.searchEventsByTitleAndDate(searchString, selectedDate);
+                    break;
+                case "DATE":
+                    // Assuming you have a method to search by date. Date parsing might be required.
+                    // Example:
+                    // Date eventDate = new SimpleDateFormat("dd/MM/yyyy").parse(searchString);
+                    // events = eventSessionLocal.searchEventsByDate(eventDate);
+                    break;
+                case "LOCATION":
+                    availableEvents = eventSessionBean.searchEventsByLocationAndDate(searchString, selectedDate);
+                    break;
+                // You can add more cases here if you have other criteria to search by
+                default:
+                    availableEvents = new ArrayList<>(); // No events or throw an exception if the search type is unknown
+                    break;
+            }
+        }
+
     }
 
-    public String handleSearch() {
+    public void handleSearch() {
         init();
-        return "findEvents.xhtml";
+
     }
 
     public void addEvent() {
@@ -106,13 +133,7 @@ public class EventManagedBean implements Serializable {
     }
 
     public String createEvent() {
-//        FacesContext context = FacesContext.getCurrentInstance();
-//        Map<String, String> params = context.getExternalContext()
-//                .getRequestParameterMap();
-//        String cIdStr = params.get("cId");
-//        System.out.println(cIdStr);
-        //Long cId = Long.parseLong(cIdStr);
-
+        FacesContext context = FacesContext.getCurrentInstance();
         init();
         Event newEvent = new Event();
 
@@ -121,6 +142,18 @@ public class EventManagedBean implements Serializable {
         newEvent.setEventDateline(getEventDateline());
         newEvent.setEventLocation(getEventLocation());
         newEvent.setEventDesc(getEventDesc());
+
+        if (getEventDate().before(getCurrentDateTime())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Event Date must happen in the future!!"));
+            return null;
+        }
+
+        if (getEventDate().before(getEventDateline())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Event Dateline must be before the event date!"));
+            return null;
+        }
 
         try {
             System.out.println("IN CREATEVENT cId: " + cId);
@@ -250,12 +283,66 @@ public class EventManagedBean implements Serializable {
 
     }
 
+    public String editEvent(Long eId) {
+        eventId = eId;
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        try {
+            selectedEvent = eventSessionBean.getEvent(eId);
+            init();
+
+            return "editEvent.xhtml?faces-redirect=true";
+        } catch (exceptions.NoResultException ex) {
+            Logger.getLogger(EventManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        init();
+
+        return "homepage.xhtml?eId";
+    }
+
+    public String saveEventDetails() {
+
+        try {
+            // Assume that a customerService exists to handle database operations
+            // and that the current user's ID is available via a method getUserId()
+            selectedEvent = eventSessionBean.getEvent(eventId);
+
+            selectedEvent.setEventTitle(getEventTitle());
+            selectedEvent.setEventDate(getEventDate());
+            selectedEvent.setEventDateline(getEventDateline());
+            selectedEvent.setEventLocation(getEventLocation());
+            selectedEvent.setEventDesc(getEventDesc());
+
+            // If a new profile photo was uploaded, update it
+            // Update the customer details in the database
+            eventSessionBean.updateEvent(selectedEvent);
+
+            // Show a confirmation message
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Your Event has been updated."));
+            loadSelectedEvent();
+            return "homepage?faces-redirect=true";
+
+        } catch (Exception e) {
+            // Handle errors (e.g. database errors) here
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "There was an error updating your Event."));
+            return null;
+        }
+    }
+
     public void loadSelectedEvent() {
         if (eventId != null) {
             try {
                 selectedEvent = eventSessionBean.getEvent(eventId);
                 if (selectedEvent != null && selectedEvent.getCustomerAttend() != null) {
                     System.out.println("I AM IN INIT");
+                    this.eventTitle = selectedEvent.getEventTitle();
+                    this.eventDate = selectedEvent.getEventDate();
+                    this.eventDateline = selectedEvent.getEventDateline();
+                    this.eventLocation = selectedEvent.getEventLocation();
+                    this.eventDesc = selectedEvent.getEventDesc();
                     attendeesAttendance.clear(); // Clear previous values
                     for (Customer attendee : selectedEvent.getCustomerAttend()) {
                         // Populate the map with true/false based on whether each attendee is marked as present
@@ -298,8 +385,45 @@ public class EventManagedBean implements Serializable {
         return "createEvents.xhtml";
     }
 
+    public String navigateToEventDetails(Long id) {
+        // Set the eventId in the managed bean
+        this.eventId = id;
+
+        // Prepare the redirect URL with the event ID as a parameter
+        return "/ViewEventDeets.xhtml?faces-redirect=true&eId=" + eventId;
+    }
+
+    public String navigateToHomePage() {
+        return "/homepage.xhtml";
+    }
+
     public boolean checkIfAttendeeIsPresentForEvent(Long cId, Long eId) {
         return eventAttendanceSessionBean.checkAttendance(cId, eId);
+    }
+
+    public void searchByDate() {
+        if (searchString == null || searchString.equals("")) {
+            availableEvents = eventSessionBean.searchEventsByTitleAndDate(null, selectedDate); // Assuming this method fetches all events
+        } else {
+            switch (searchType) {
+                case "TITLE":
+                    availableEvents = eventSessionBean.searchEventsByTitleAndDate(searchString, selectedDate);
+                    break;
+                case "DATE":
+                    // Assuming you have a method to search by date. Date parsing might be required.
+                    // Example:
+                    // Date eventDate = new SimpleDateFormat("dd/MM/yyyy").parse(searchString);
+                    // events = eventSessionLocal.searchEventsByDate(eventDate);
+                    break;
+                case "LOCATION":
+                    availableEvents = eventSessionBean.searchEventsByLocationAndDate(searchString, selectedDate);
+                    break;
+                // You can add more cases here if you have other criteria to search by
+                default:
+                    availableEvents = new ArrayList<>(); // No events or throw an exception if the search type is unknown
+                    break;
+            }
+        }
     }
 
     public String getEventTitle() {
@@ -412,6 +536,34 @@ public class EventManagedBean implements Serializable {
 
     public void setAttendeesAttendance(Map<Long, Boolean> attendeesAttendance) {
         this.attendeesAttendance = attendeesAttendance;
+    }
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
+    }
+
+    public Date getSelectedDate() {
+        return selectedDate;
+    }
+
+    public void setSelectedDate(Date selectedDate) {
+        this.selectedDate = selectedDate;
+    }
+
+    public Date getCurrentDateTime() {
+        return new Date(); // This returns the current date and time
     }
 
 }

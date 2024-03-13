@@ -47,19 +47,14 @@
 
 
             <p:dataTable var="attendee" value="#{eventManagedBean.selectedEvent.customerAttend}">
-                <p:column headerText="Attendee Name">
+                <p:column headerText="Attendee Names">
                     <h:link value="#{attendee.firstname} #{attendee.lastname}" outcome="/ViewOthersProfile">
                         <f:param name="cId" value="#{attendee.id}" />
                     </h:link>
                 </p:column>
-                <p:column headerText="Mark Attendance">
-                    <p:selectBooleanCheckbox value="#{eventManagedBean.attendeesAttendance[attendee.id]}" />
-                </p:column>
             </p:dataTable>
-            <p:commandButton value="Back" action ="#{eventManagedBean.viewEvents}"/>
-            <p:commandButton value="Save Attendance" action="#{eventManagedBean.saveAttendance}" update="@form" />
 
-
+            <p:button value="Back" outcome="/findEvents.xhtml"/>
         </h:form>
     </h:body>
 </html>

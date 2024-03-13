@@ -1,68 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Available Events</title>
+        <title>Find Events</title>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form id="eventsForm">
+            <p:growl id="growl" showDetail="true" sticky="true"/>
+
             <p:toolbar>
                 <f:facet name="left">
-                    <h:graphicImage name="logo.png" library="images" width="60px" alt="Logo"/>
-                    <p:inputText placeholder="Search..." style = "margin-left:20px"/>
-                    <p:commandButton  action="#{searchManagedBean.search}" icon="fa fa-fw fa-search" />    
+                    <h:link outcome="/homepage.xhtml">
+                        <p:graphicImage name="logo.png" library="images" style="width:60px"/>
+                    </h:link>
                 </f:facet>
 
-                <f:facet name="right">                
-                    <h:button value="Find Events" outcome="/findEvents.xhtml" styleClass="header-button"/>
-                    <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/><!--
-                              <h:graphicImage name="#{customerManagedBean.profilePhotoName != null ? customerManagedBean.profilePhotoName : 'blankprofilepicture.png'}" library="images" width="60px" alt="Profile Picture"/>>-->
+                <f:facet name="right">
+                    <p:commandButton value="Find Events" action="#{eventManagedBean.navigateToFindEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button"/>
+                    <p:commandButton value="Create Events" action="#{eventManagedBean.navigateToCreateEvents}" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only header-button"/>
                     <h:graphicImage name="blankprofilepicture.png" library="images" width="60px" alt="Logo"/>
                     <p:menuButton value="#{customerManagedBean.fullname}">
-                        <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}" icon="pi pi-save" />
-                        <p:menuitem value="Log Out"  action="#{customerManagedBean.logout}" icon="pi pi-refresh" />
+                        <p:menuitem value="View My Events" action="#{eventManagedBean.viewEvents}" icon="fa fa-fw fa-calendar-o"/>
+                        <p:menuitem value="Edit Profile" action="#{customerManagedBean.editCustomer}" icon="fa fa-fw fa-edit"/>
+                        <p:menuitem value="Log Out" action="#{authenticationManagedBean.logout}" icon="fa fa-fw fa-sign-out"/>
                     </p:menuButton>
                 </f:facet>
             </p:toolbar>
 
-
-
-
-
-
-
-            <p:dataTable var="event" value="#{eventManagedBean.availableEvents}"
-                         emptyMessage="No events available to attend.">
+            <p:dataTable  id="eventsTable" var="event" value="#{eventManagedBean.availableEvents}" resizableColumns="true" emptyMessage="No events found with given criteria">
                 <f:facet name="header">
-                    Available Events
+                    <p:outputPanel style="text-align: right;">
+                        <p:calendar value="#{eventManagedBean.selectedDate}" 
+                                    pattern="dd/MM/yyyy" 
+                                    showOn="button"
+                                    navigator="true">
+                            <p:ajax event="dateSelect" listener="#{eventManagedBean.searchByDate}" update="eventsTable" />
+                        </p:calendar>
+
+
+                        <h:outputText value="Filter By: "/>
+                        <h:selectOneMenu value="#{eventManagedBean.searchType}">
+                            <f:selectItem itemValue="TITLE" itemLabel="title"/>
+                            <f:selectItem itemValue="LOCATION" itemLabel="location"/>
+                            <p:ajax listener="#{eventManagedBean.handleSearch}" update="eventsForm"/>
+                        </h:selectOneMenu>
+                        <p:inputText placeholder="Search..." style="margin-left:20px" value="#{eventManagedBean.searchString}" />
+                        <p:commandButton action="#{eventManagedBean.handleSearch}" icon="fa fa-search" update="eventsTable" />
+                    </p:outputPanel>
                 </f:facet>
 
                 <p:column headerText="Title">
-                    <h:outputText value="#{event.eventTitle}" />
+                    <h:outputText value="#{event.eventTitle}"/>
                 </p:column>
                 <p:column headerText="Date">
                     <h:outputText value="#{event.eventDate}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:MM" />
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Location">
-                    <h:outputText value="#{event.eventLocation}" />
+                    <h:outputText value="#{event.eventLocation}"/>
                 </p:column>
                 <p:column headerText="Description">
-                    <h:outputText value="#{event.eventDesc}" />
+                    <h:outputText value="#{event.eventDesc}"/>
                 </p:column>
                 <p:column headerText="Deadline">
                     <h:outputText value="#{event.eventDateline}">
-                        <f:convertDateTime pattern="dd/MM/yyyy " />
-
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
                     </h:outputText>
                 </p:column>
-                <p:column headerText="Actions">
-                    <!-- You can put buttons or links here for actions like 'View', 'Register', etc. -->
-                    <p:commandButton value="View" />
-                    <p:commandButton value="Register"/>
+                <p:column headerText="">
+                     <p:commandButton value="View Details" action="#{eventManagedBean.navigateToEventDetails(event.id)}"
+                                     ajax="false" icon="pi pi-search"/>
+                    <p:commandButton rendered="#{eventManagedBean.isCustomerRegistered(event.id)}" 
+                                     value="Unregister" 
+                                     action="#{eventManagedBean.unregisterEvent(event.id,authenticationManagedBean.cId)}" 
+                                     update="@form"/>
+                    <p:commandButton rendered="#{not eventManagedBean.isCustomerRegistered(event.id)}" 
+                                     value="Register" 
+                                     action="#{eventManagedBean.registerEvent(event.id, authenticationManagedBean.cId)}" 
+                                     update="@form"
+                                     />
                 </p:column>
             </p:dataTable>
         </h:form>

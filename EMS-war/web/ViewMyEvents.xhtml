@@ -8,14 +8,13 @@
     </h:head>
     <h:body>
         <h:form>
-            <h:outputText value="cId param: #{authenticationManagedBean.cId}" />
+       
             <p:toolbar>
                 <f:facet name="left">
                     <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
                         <p:graphicImage name="logo.png" library="images" style= "width:60px"/>
                     </h:link>
-                    <p:inputText placeholder="Search..." style = "margin-left:20px"/>
-                    <p:commandButton  action="#{searchManagedBean.search}" icon="fa fa-fw fa-search" />    
+                  
                 </f:facet>
 
                 <f:facet name="right">                
@@ -28,7 +27,7 @@
                     </p:commandButton>
                     <!--                    <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/>-->
 
-                    <h:graphicImage name="blankprofilepicture.png" library="images" width="60px" alt="Logo"/>
+                       <p:graphicImage value="#{customerManagedBean.profilePhotoName}" style="border-radius: 50%; border: 3px solid #ddd; box-shadow: 2px 2px 2px #ccc; width: 100px; height: 100px; object-fit: cover;" alt="Profile Picture"/>
                     <p:menuButton value="#{customerManagedBean.fullname}">
                         <p:menuitem value="View My Events" action ="#{eventManagedBean.viewEvents}" />
                         <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}"  />
@@ -39,6 +38,30 @@
 
 
             <p:growl id="growl" life="3000"/>
+            <p:panelGrid columns="2" style="margin-bottom:20px; max-width:600px; margin:auto;" columnClasses="label,value">
+            
+            <f:facet name="header">
+                My Profile
+            </f:facet>
+
+            <h:outputLabel value="First Name:" />
+            <h:outputText value="#{customerManagedBean.firstname}" style="font-weight:bold;"/>
+
+            <h:outputLabel value="Last Name:" />
+            <h:outputText value="#{customerManagedBean.lastname}" style="font-weight:bold;"/>
+
+            <h:outputLabel value="Email:" />
+            <h:outputText value="#{customerManagedBean.email}" style="font-weight:bold;"/>
+
+            <h:outputLabel value="Contact Details:" />
+            <h:outputText value="#{customerManagedBean.contactNumber}" style="font-weight:bold;"/>
+
+            <h:outputLabel value="Profile Photo:" />
+            <p:graphicImage value="#{customerManagedBean.profilePhotoName}" 
+                style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover; border: 1px solid #dcdcdc;" 
+                alt="Profile Photo"/>
+
+        </p:panelGrid>
 
             <h:panelGrid columns="1" style="width:100%; margin-bottom:20px;">
                 <p:panel header="Hosted Events" style="margin-bottom: 10px;">
@@ -67,7 +90,10 @@
                             <p:button icon="fa fa-fw fa-search" title="View" outcome="ViewEventDetails">
                                 <f:param name="eId" value="#{event.id}" />
                             </p:button>
-                            <p:commandButton action="#{eventManagedBean.editEvent(event.id)}" icon="fa fa-fw fa-edit" />
+                             <p:button icon="fa fa-fw fa-edit" title="Edit" outcome="editEvent">
+                                <f:param name="eId" value="#{event.id}" />
+                            </p:button>
+     
                             <p:commandButton action="#{eventManagedBean.deleteEvent(event.id)}" update="@form" icon="fa fa-fw fa-remove" />
                         </p:column>
                     </p:dataTable>
@@ -96,7 +122,8 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Actions">
-                            <p:commandButton action="#{eventManagedBean.viewDetails(event.id)}" icon="fa fa-fw fa-search" />
+                            <p:commandButton value="View Details" action="#{eventManagedBean.navigateToEventDetails(event.id)}"
+                                     ajax="false" icon="pi pi-search"/>
                             <p:commandButton value = "Unregister" action="#{eventManagedBean.unregisterEvent(event.id,customerManagedBean.cId)}" update="@form" icon="fa fa-fw fa-remove"/>
                         </p:column>
                     </p:dataTable>

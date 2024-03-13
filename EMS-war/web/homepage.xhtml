@@ -10,14 +10,14 @@
     </h:head>
     <h:body>
         <h:form>
-            <h:outputText value="cId param: #{authenticationManagedBean.cId}" />
+<!--            <h:outputText value="cId param: #{authenticationManagedBean.cId}" />
+               <h:outputText value="#{customerManagedBean.profilePhotoName}"/>-->
             <p:toolbar>
                 <f:facet name="left">
-                   <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
+                    <h:link outcome="/homepage.xhtml"> <!-- Update the outcome to the correct path to your homepage -->
                         <p:graphicImage name="logo.png" library="images" style= "width:60px"/>
                     </h:link>
-                    <p:inputText placeholder="Search..." style = "margin-left:20px"/>
-                    <p:commandButton  action="#{searchManagedBean.search}" icon="fa fa-fw fa-search" />    
+                 
                 </f:facet>
 
                 <f:facet name="right">                
@@ -30,9 +30,9 @@
                     </p:commandButton>
                     <!--                    <h:button value="Create Events" outcome="/createEvents.xhtml" styleClass="header-button"/>-->
 
-                    <h:graphicImage name="blankprofilepicture.png" library="images" width="60px" alt="Logo"/>
+                    <p:graphicImage value="#{customerManagedBean.profilePhotoName}" style="border-radius: 50%; border: 3px solid #ddd; box-shadow: 2px 2px 2px #ccc; width: 100px; height: 100px; object-fit: cover;" alt="Profile Picture"/>
                     <p:menuButton value="#{customerManagedBean.fullname}">
-                        <p:menuitem value="View My Events" action ="#{eventManagedBean.viewEvents}" icon="fa fa-fw fa-calendar-o" />
+                        <p:menuitem value="View My Profile" action ="#{eventManagedBean.viewEvents}" icon="fa fa-fw fa-calendar-o" />
                         <p:menuitem value="Edit Profile" action ="#{customerManagedBean.editCustomer}"  icon="fa fa-fw fa-edit"/>
                         <p:menuitem value="Log Out"  action="#{authenticationManagedBean.logout}"  icon ="fa fa-fw fa-sign-out"/>
                     </p:menuButton>
@@ -65,7 +65,9 @@
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Actions">
-                    <p:commandButton action="#{eventManagedBean.viewEvent(event.id)}" icon="fa fa-fw fa-search" />
+                    <p:commandButton value="View Details" action="#{eventManagedBean.navigateToEventDetails(event.id)}"
+                                     ajax="false" icon="pi pi-search"/>
+
                     <p:commandButton rendered="#{eventManagedBean.isCustomerRegistered(event.id)}" 
                                      value="Unregister" 
                                      action="#{eventManagedBean.unregisterEvent(event.id,authenticationManagedBean.cId)}" 
@@ -74,7 +76,7 @@
                                      value="Register" 
                                      action="#{eventManagedBean.registerEvent(event.id, authenticationManagedBean.cId)}" 
                                      update="@form"
-                                    />
+                                     />
                 </p:column>
             </p:dataTable>
         </h:form>
